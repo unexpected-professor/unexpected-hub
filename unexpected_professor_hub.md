@@ -9,12 +9,17 @@
 | Created | 2026-09-01 |
 | Last updated | 2026-09-01 |
 | Confirmed public name | The Unexpected Professor |
-| YouTube | Channel name confirmed; exact handle/URL still to record |
+| YouTube | `https://www.youtube.com/@TheUnexpectedProfessor` |
+| Launch language | French-first |
+| Current project status | Personal and non-professional; reassess before monetisation or institutional affiliation |
+| Educational-content licence | Creative Commons Attribution-ShareAlike 4.0 International (`CC-BY-SA-4.0`) |
+| Source-code licence | GNU General Public License version 3 only (`GPL-3.0-only`) |
 | GitHub account | `unexpected-professor` (`https://github.com/unexpected-professor/`) |
 | Canonical repository | `git@github.com:unexpected-professor/unexpected-hub.git` |
 | Local canonical clone | `/home/luiz-villa/code/unexpected/unexpected-hub` |
 | Canonical branch | `main` |
 | Repository-local Git author | `The Unexpected Professor` with the account-scoped GitHub no-reply address |
+| Remote publication state | Commit 0 (`0c5a043`) published on `origin/main`; local Commit 1 remains unpushed |
 | Current course repository | `Energie S3` |
 | Current course branch | `dash` |
 | Course baseline at project creation | `238f504` (`docs(status): reconcile progress trackers and record resume point`) |
@@ -241,10 +246,11 @@ licence: "TBD"
 draft: true
 ```
 
-French is the expected initial teaching language. The current Dash interface
-already supports French and English, but a bilingual public-site strategy is a
-separate decision. Do not duplicate every page in two languages until the
-maintenance cost and intended audience have been evaluated.
+French is the confirmed launch language. The current Dash interface already
+supports French and English, but the public website will be French-first. Do
+not duplicate every page in two languages until the maintenance cost and
+intended audience have been evaluated. English content may be added later as a
+separately planned extension.
 
 ## 6. Repository and source boundaries
 
@@ -678,14 +684,14 @@ or documented decision.
 | ID | Workstream | Deliverable / acceptance criterion | Status | Depends on | Evidence / reference | Last update |
 |---|---|---|---|---|---|---|
 | UPH-000 | Governance | Create this canonical hub plan and tracker | DONE | None | `unexpected_professor_hub.md`; Commit 0 subject below | 2026-09-01 |
-| UPH-001 | Identity | Confirm exact public spelling, capitalisation, and YouTube handle | IN PROGRESS | None | Display name confirmed as **The Unexpected Professor**; exact YouTube handle/URL pending | 2026-09-01 |
+| UPH-001 | Identity | Confirm exact public spelling, capitalisation, and YouTube handle | DONE | None | **The Unexpected Professor**; `https://www.youtube.com/@TheUnexpectedProfessor` | 2026-09-01 |
 | UPH-002 | Identity | Shortlist domains and verify availability, trademark ambiguity, and handle consistency | NOT STARTED | UPH-001 | — | 2026-09-01 |
 | UPH-003 | Identity | Register domain and enable registrar MFA/recovery | NOT STARTED | UPH-002 | — | 2026-09-01 |
-| UPH-004 | Governance | Decide French-only versus bilingual launch | NOT STARTED | UPH-001 | — | 2026-09-01 |
-| UPH-005 | Governance | Select content, code, and asset licensing policy | NOT STARTED | None | — | 2026-09-01 |
-| UPH-006 | Governance | Determine personal/professional/institutional status and legal-notice requirements | NOT STARTED | UPH-001 | — | 2026-09-01 |
+| UPH-004 | Governance | Decide French-only versus bilingual launch | DONE | UPH-001 | French-first launch; English may be evaluated later | 2026-09-01 |
+| UPH-005 | Governance | Select content, code, and asset licensing policy | DONE | None | Educational content: `CC-BY-SA-4.0`; code: `GPL-3.0-only`; third-party and brand assets require explicit notices; see `LICENSE.md` | 2026-09-01 |
+| UPH-006 | Governance | Determine personal/professional/institutional status and legal-notice requirements | IN PROGRESS | UPH-001 | Personal/non-professional status confirmed; host identification and final legal/privacy notice must be reviewed before launch and status reassessed before monetisation or affiliation | 2026-09-01 |
 | UPH-007 | Source control | Audit existing material for public export and metadata exposure | NOT STARTED | UPH-005, UPH-006 | — | 2026-09-01 |
-| UPH-008 | Source control | Create clean public-platform repository with protected secrets and correct author identity | IN PROGRESS | UPH-001, UPH-005, UPH-007 | Empty public repository cloned at `/home/luiz-villa/code/unexpected/unexpected-hub`; `origin` verified; repository-local pseudonymous author and account-scoped no-reply email configured; scaffolding and export audit pending | 2026-09-01 |
+| UPH-008 | Source control | Create clean public-platform repository with protected secrets and correct author identity | IN PROGRESS | UPH-001, UPH-005, UPH-007 | Commit 0 published to `origin/main`; repository-local pseudonymous author and account-scoped no-reply email configured; dedicated `github-unexpected-professor` SSH alias verified; README, licences, security/contribution policies, ignore rules, and public-boundary checklist added in local Commit 1; first asset export audit pending | 2026-09-01 |
 | UPH-009 | Architecture | Decide Coolify versus Docker Compose + Caddy | NOT STARTED | None | — | 2026-09-01 |
 | UPH-010 | Hosting | Select EU VPS provider, region, initial capacity, backup option, and budget ceiling | NOT STARTED | UPH-009 | — | 2026-09-01 |
 | UPH-011 | Hosting | Provision VPS, administrative account, SSH keys, firewall, and updates | NOT STARTED | UPH-003, UPH-010 | — | 2026-09-01 |
@@ -816,6 +822,10 @@ scope.
 | ADR-009 | 2026-09-01 | Defer PeerTube and self-hosted video | ACCEPTED | Video operations are disproportionate to the initial need |
 | ADR-010 | 2026-09-01 | Choose between Coolify and plain Compose before VPS provisioning | OPEN | Affects server sizing and the operations workflow, not application portability |
 | ADR-011 | 2026-09-01 | Use **The Unexpected Professor** as the exact public display name and `unexpected-professor/unexpected-hub` as the public GitHub namespace | ACCEPTED | Establishes the initial brand and clean public source boundary; YouTube handle and domain remain separate decisions |
+| ADR-012 | 2026-09-01 | Launch in French first | ACCEPTED | Matches the immediate teaching audience and avoids maintaining premature bilingual duplication |
+| ADR-013 | 2026-09-01 | Operate initially as a personal, non-professional project independent of formal IUT affiliation | ACCEPTED | Preserves a clear public boundary; legal and institutional status must be reassessed if funding, monetisation, branding, or official use changes |
+| ADR-014 | 2026-09-01 | Licence original educational content under `CC-BY-SA-4.0` and source code under `GPL-3.0-only` | ACCEPTED | Supports reuse with attribution and share-alike obligations while keeping code under strong copyleft; third-party material remains under its original terms |
+| ADR-015 | 2026-09-01 | Use a dedicated GitHub SSH identity for the `unexpected-professor` account | ACCEPTED | Existing key `id_ed25519_tup` authenticates as `unexpected-professor`; SSH alias `github-unexpected-professor` and the repository remote now select it explicitly |
 
 ## 21. Risk register
 
@@ -861,44 +871,41 @@ supersedes it; link to the new decision or correction.
 |---|---|---|---|---|---|
 | 2026-09-01 | Initial hosting study and hub plan | Defined the YouTube/site/Dash/Moodle roles; compared VPS deployment models; specified architecture, operational baseline, phased tracker, decision log, risks, and atomic commit sequence | Markdown structure inspected; `git diff --check` passes | Course-repository planning commit `1e680e6` | Establish the canonical plan in the clean public repository |
 | 2026-09-01 | Phase 0 identity and repository boundary | Confirmed the display name **The Unexpected Professor**; audited the empty `unexpected-professor/unexpected-hub` clone and remote; prevented inheritance of the personal global Git email by setting repository-local pseudonymous author metadata | GitHub reports `unexpected-professor` as user ID `323542878`; local repository is empty on `main`; remote is `git@github.com:unexpected-professor/unexpected-hub.git` | Commit 0: `docs(plan): add The Unexpected Professor hub roadmap` | Confirm GitHub email-privacy settings and exact YouTube handle, then resolve language, licence, legal status, domain, and ADR-010 |
+| 2026-09-01 | Phase 0 project choices | Recorded `@TheUnexpectedProfessor`, French-first publication, personal/non-professional status, `CC-BY-SA-4.0` educational content, and `GPL-3.0-only` code; attempted the authorised first push | Local tracker and licence boundary updated; GitHub rejected the push because SSH authenticated as `luizvilla`, leaving the remote empty and local Commit 0 intact | Commit 1: `chore(hub): establish public repository boundaries` (local) | Configure a dedicated GitHub SSH identity, push Commit 0, then request separate approval before pushing Commit 1 |
+| 2026-09-01 | Phase 0 GitHub authentication recovery | Located the existing dedicated `id_ed25519_tup` key, verified it authenticates as `unexpected-professor`, published exactly Commit 0, added the `github-unexpected-professor` SSH alias, and made the repository remote use that alias | `origin/main` at `0c5a043`; local `main` one commit ahead at Commit 1; SSH authentication test returned `Hi unexpected-professor!` | Remote: `0c5a043`; local: `e82d958` before amendment | Review the amended local Commit 1 and obtain explicit approval before pushing it |
 
 ## 24. Known open questions
 
-1. What is the exact YouTube handle/URL? The channel and website display name
-   is confirmed as **The Unexpected Professor**.
-2. Which matching `.fr`, `.com`, or other domain names are available?
-3. Is the initial audience French-speaking students only, or also a broader
-   English-speaking audience?
-4. Will the platform be personal, professionally monetised, institutionally
-   affiliated, or deliberately separate from the IUT?
-5. Which licences should apply to written material, slides, diagrams, code,
-   datasets, and generated images?
-6. Should the first deployment favour Coolify convenience or plain Compose
+1. Which matching `.fr`, `.com`, or other domain names are available?
+2. Should the first deployment favour Coolify convenience or plain Compose
    simplicity?
-7. What recurring monthly budget is acceptable?
-8. What is the expected maximum simultaneous class size?
-9. Which existing lesson and video should form the first vertical slice?
-10. Should the first lab be publicly discoverable, public but unlisted, or
+3. What recurring monthly budget is acceptable?
+4. What is the expected maximum simultaneous class size?
+5. Which existing lesson and video should form the first vertical slice?
+6. Should the first lab be publicly discoverable, public but unlisted, or
     protected through institutional infrastructure?
+7. Does any existing course asset contain third-party material that prevents
+   release under `CC-BY-SA-4.0`?
+8. What exact legal notice is appropriate once the VPS provider and domain
+   registrar are known?
 
 ## 25. Resume from here
 
-Phase 0 has begun. The empty public repository exists locally and remotely, and
-its pseudonymous repository-local author identity is configured. No public
-infrastructure, domain, application scaffold, or deployment has been created.
+Phase 0 is in progress. Commit 0 is published on `origin/main`. The repository
+uses a dedicated SSH alias that authenticates as `unexpected-professor`, and
+local `main` contains the unpushed Commit 1 repository-boundary work. No public
+infrastructure, domain, application scaffold, course asset, or deployment has
+been created.
 
 At the next session:
 
 1. In GitHub **Settings -> Emails**, confirm **Keep my email addresses private**
    and enable blocking of command-line pushes that expose a personal email.
-2. Record the exact YouTube handle/URL and decide the intended launch language.
-3. Decide the legal/institutional relationship and provisional licence policy
-   before exporting existing material.
+2. Review local Commit 1 and push it only after separate authorisation.
+3. Audit candidate course material and third-party assets before public export.
 4. Compare available domain names and choose a registrar.
 5. Decide between Coolify and Docker Compose + Caddy, then select an EU VPS
    size and provider.
-6. Continue the clean public repository with Commit 1 only after the remaining
-   Phase 0 boundary decisions are recorded.
 
 Do not begin broad site design or copy course assets until the public boundary,
 licensing, identity metadata, and repository destination have been decided.

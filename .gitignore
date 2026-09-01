@@ -1,0 +1,43 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+.direnv/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# JavaScript / Astro
+node_modules/
+.astro/
+dist/
+.eslintcache
+
+# Build and runtime output
+build/
+coverage/
+*.log
+*.pid
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Local deployment state
+/runtime-data/
+/backups/
+/secrets/
