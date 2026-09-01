@@ -84,9 +84,17 @@ within EUR 5-10/month, leaving headroom for backups.
 | **Hetzner** | CX22 — 2 vCPU x86, 4 GB, 40 GB, 20 TB traffic | ~EUR 4.5-5 | DE, FI | Best price/performance; very large self-hosting community; Cloud Firewall included; Backups add-on = 20% of server price. Hetzner raised cloud prices several times in 2026 — treat pricing as volatile. |
 | Hetzner | CAX11 — 2 vCPU ARM (Ampere), 4 GB, 40 GB | ~EUR 3.5-4 | DE, FI | Cheaper; fine because Dash/Python/Caddy all ship arm64 images. Small risk: a Python wheel without an arm64 build. |
 | netcup | VPS 1000 ARM G11 — 6 vCPU, 8 GB, 256 GB NVMe | ~EUR 6.5 + VAT | DE, AT | More resources per euro; ARM stock has been intermittent; historically 12-month minimum terms. |
-| **OVHcloud** | VPS entry — ~2 vCore, 4 GB | ~EUR 6 | EU (incl. FR) | French/EU; single account with the domain; slightly lower raw performance than Hetzner. |
+| **OVHcloud** | **VPS-1** — 2 vCore, 4 GB, 40 GB NVMe | ~EUR 4.6/mo TTC | EU (GRA, SBG, DE) | French/EU; single account with the domain; daily automated backup and anti-DDoS included; slightly lower raw performance than Hetzner. VPS-2 (4 vCore / 8 GB) ~EUR 8.7 is the upgrade path. |
 | Contabo | ~4 vCPU, 6 GB, large disk | ~EUR 6 | DE and others | Lots of resources; more variable disk I/O and slower support. |
 | Scaleway | DEV1 range | Higher for equal specs | FR, NL, PL | French sovereignty option; pricier per unit of compute. |
+
+### 2.1a Not a VPS: OVH shared web hosting
+
+OVH also sells *hébergement web mutualisé* (Perso, Pro, Startup, Starter,
+"Hébergement gratuit"). **These are not suitable.** Shared hosting serves only
+static files and PHP, with no root, no Docker, and no way to run a persistent
+Gunicorn process — so it cannot host the Dash laboratory, which is half of the
+pilot. The bundled "1 nom de domaine offert" is not a reason to buy one.
 
 ### 2.2 Recommendation
 
@@ -95,7 +103,9 @@ within EUR 5-10/month, leaving headroom for backups.
   volume if the image cache needs it. x86 avoids any arm64 packaging surprises
   during the pilot.
 - **If a French/EU-company registrar and host on one invoice is preferred:**
-  **OVHcloud VPS** at ~EUR 6/month, same account as the domain.
+  **OVHcloud VPS-1** (2 vCore / 4 GB / 40 GB NVMe, ~EUR 4.6/month TTC, daily
+  automated backup included) in Gravelines or Strasbourg, with Ubuntu LTS.
+  Same OVH account as the domain. This is the current chosen direction.
 - Either way: enable provider snapshots/backups **and** configure an
   independent off-site backup (UPH-028) — provider snapshots alone are not the
   independent copy the plan requires. Candidates for the off-site copy: Hetzner
@@ -111,12 +121,17 @@ first step is resizing the Hetzner/OVH instance, not re-architecting.
 
 ## 3. What still needs a human decision
 
+Decided 2026-09-01: **OVHcloud** for both the registrar and the VPS, on one
+account (ADR-018).
+
+Still to confirm:
+
 1. Canonical TLD: `.com` (recommended) or `.fr`.
 2. Exact domain string to register (recommended: `theunexpectedprofessor.com`
    canonical + `unexpectedprofessor.com` redirect).
-3. Registrar: OVHcloud (recommended) or Cloudflare Registrar.
-4. VPS provider: Hetzner CX22 (recommended) or OVHcloud VPS.
-5. Recurring cost owner and payment method (for the operations record).
+3. VPS plan and region: **OVHcloud VPS-1**, Gravelines or Strasbourg
+   (recommended).
+4. Recurring cost owner and payment method (for the operations record).
 
 Once chosen, record the registrar, the domain, the provider, the region, the
 plan, the monthly cost, and the account owner in the tracker (UPH-002,
