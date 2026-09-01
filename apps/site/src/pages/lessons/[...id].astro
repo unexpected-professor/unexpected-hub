@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const isProd = import.meta.env.PROD;
+  const lessons = (await getCollection('lessons')).filter(
+    (lesson) => !isProd || !lesson.data.draft,
+  );
+  return lessons.map((lesson) => ({
+    params: { id: lesson.id },
+    props: { lesson },
+  }));
+}
+
+const { lesson } = Astro.props;
+const { Content } = await render(lesson);
+const { data } = lesson;
+
+// A minimal lesson page. The full canonical lesson template — consent-gated
+// video, structured transcript, equations, embedded lab, sources, previous/
+// next navigation — is built in the next commit (hub section 5.2).
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  index={!data.draft}
+>
+  <article class="prose">
+    {data.draft && <p><span class="badge">brouillon</span></p>}
+    <h1>{data.title}</h1>
+    <p><em>{data.summary}</em></p>
+
+    <Content />
+
+    {
+      data.lab_url && (
+        <p>
+          <a href={data.lab_url}>Ouvrir le laboratoire interactif</a>
+        </p>
+      )
+    }
+
+    <hr />
+    <p>
+      Auteur : {data.authors.join(', ')}. Licence : {data.licence}.
+      {data.updated_at &&
+        ` Mis à jour le ${data.updated_at.toLocaleDateString('fr-FR')}.`}
+    </p>
+  </article>
+</BaseLayout>

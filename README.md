@@ -4,9 +4,10 @@ The Unexpected Professor is a personal, French-first educational publishing
 project combining structured web lessons, YouTube videos, and interactive
 browser laboratories.
 
-The project is currently in **Phase 0: decisions and safe project boundary**.
-No website, dashboard, domain, or production infrastructure has been deployed
-from this repository yet.
+The project is currently in **Phase 1: local vertical slice**. Phase 0
+decisions are complete and `theunexpectedprofessor.com` is registered. The
+Astro site scaffold lives in [`apps/site/`](apps/site/); no dashboard or
+production infrastructure has been deployed yet.
 
 ## Project channels
 
@@ -45,8 +46,10 @@ See [`LICENSE.md`](LICENSE.md) for the exact scope and exceptions.
 ## Current resume point
 
 Use the tracker and the **Resume from here** section in
-[`unexpected_professor_hub.md`](unexpected_professor_hub.md). The name, licence,
-legal status, dedicated GitHub SSH identity, deployment model (Docker Compose +
-Caddy), budget ceiling, and first vertical slice are decided. The next work is
-to audit the first candidate Dash laboratory (`cm1_dash`) for public release,
-then select a domain, registrar, and EU VPS provider.
+[`unexpected_professor_hub.md`](unexpected_professor_hub.md). Phase 0 is
+complete: name, licence, legal status, GitHub SSH identity, deployment model
+(Docker Compose + Caddy), budget ceiling, first vertical slice, registrar and
+host (OVHcloud), and the `cm1_dash` asset audit are all done. The next work is
+Commit 3 (canonical lesson template + consent-gated YouTube + legal pages),
+then Commit 4 (export and productionise the `cm1_dash` laboratory), then
+provisioning the OVHcloud VPS.

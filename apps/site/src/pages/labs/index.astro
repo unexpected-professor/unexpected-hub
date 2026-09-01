@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const isProd = import.meta.env.PROD;
+const labs = (await getCollection('lessons'))
+  .filter((lesson) => lesson.data.lab_url && (!isProd || !lesson.data.draft))
+  .sort(
+    (a, b) => (a.data.sequence_index ?? 0) - (b.data.sequence_index ?? 0),
+  );
+---
+
+<BaseLayout
+  title="Laboratoires interactifs"
+  description="Simulations exécutées dans le navigateur, reliées aux leçons : convertisseurs, formes d'onde, plans tension-courant."
+>
+  <div class="prose">
+    <h1>Laboratoires interactifs</h1>
+    <p>
+      Les laboratoires sont des applications interactives auto-hébergées. Chaque
+      laboratoire est accessible en plein écran et relié à sa leçon.
+    </p>
+    <p>
+      Le premier laboratoire de production — les fondamentaux de la conversion
+      (topologies Buck / Boost, conduction continue et discontinue) — est en
+      cours de préparation.
+    </p>
+  </div>
+
+  {
+    labs.length > 0 && (
+      <ul class="card-list">
+        {labs.map((lesson) => (
+          <li class="card">
+            <h3>{lesson.data.title}</h3>
+            <p>{lesson.data.summary}</p>
+            <p>
+              <a href={lesson.data.lab_url}>Ouvrir en plein écran</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

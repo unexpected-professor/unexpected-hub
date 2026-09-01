@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const isProd = import.meta.env.PROD;
+const lessons = (await getCollection('lessons'))
+  .filter((lesson) => !isProd || !lesson.data.draft)
+  .sort((a, b) => {
+    const seq =
+      (a.data.sequence_index ?? 0) - (b.data.sequence_index ?? 0);
+    if (seq !== 0) return seq;
+    return a.data.title.localeCompare(b.data.title, 'fr');
+  });
+---
+
+<BaseLayout
+  title="Leçons"
+  description="Toutes les leçons publiées : électronique de puissance, conversion d'énergie et sujets associés."
+>
+  <div class="prose">
+    <h1>Leçons</h1>
+    <p>
+      Les leçons sont organisées par sujet. Chaque leçon peut comporter une
+      vidéo, une explication écrite, des équations et un laboratoire
+      interactif.
+    </p>
+  </div>
+
+  {
+    lessons.length === 0 ? (
+      <p>Aucune leçon publiée pour l'instant.</p>
+    ) : (
+      <ul class="card-list">
+        {lessons.map((lesson) => (
+          <li class="card">
+            <h3>
+              <a href={`/lessons/${lesson.id}`}>{lesson.data.title}</a>
+            </h3>
+            <p>{lesson.data.summary}</p>
+            <p>
+              {lesson.data.topics.map((topic) => (
+                <span class="badge">{topic}</span>
+              ))}
+              {lesson.data.draft && <span class="badge">brouillon</span>}
+            </p>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

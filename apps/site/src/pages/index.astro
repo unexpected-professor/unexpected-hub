@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const isProd = import.meta.env.PROD;
+const lessons = (await getCollection('lessons'))
+  .filter((lesson) => !isProd || !lesson.data.draft)
+  .sort(
+    (a, b) => (a.data.sequence_index ?? 0) - (b.data.sequence_index ?? 0),
+  );
+---
+
+<BaseLayout
+  title="The Unexpected Professor"
+  description="Leçons structurées, vidéos et laboratoires interactifs sur l'électronique de puissance et la conversion d'énergie."
+>
+  <div class="prose">
+    <h1>The Unexpected Professor</h1>
+    <p>
+      Un projet pédagogique en français qui réunit des leçons écrites, des
+      vidéos et des laboratoires interactifs dans le navigateur, autour de
+      l'électronique de puissance et de la conversion d'énergie.
+    </p>
+    <p>
+      Le site est la référence pour le contenu ; les vidéos vivent sur
+      <a href="https://www.youtube.com/@TheUnexpectedProfessor">YouTube</a> et
+      les laboratoires sont des applications interactives auto-hébergées.
+    </p>
+    <p><strong>Projet en phase pilote.</strong> Le contenu et l'infrastructure
+      sont en cours de construction.</p>
+  </div>
+
+  <h2>Leçons récentes</h2>
+  {
+    lessons.length === 0 ? (
+      <p>Aucune leçon publiée pour l'instant.</p>
+    ) : (
+      <ul class="card-list">
+        {lessons.slice(0, 6).map((lesson) => (
+          <li class="card">
+            <h3>
+              <a href={`/lessons/${lesson.id}`}>{lesson.data.title}</a>
+            </h3>
+            <p>{lesson.data.summary}</p>
+            {lesson.data.draft && <span class="badge">brouillon</span>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
