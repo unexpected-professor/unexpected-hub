@@ -1,52 +1,183 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 
 export async function getStaticPaths() {
   const isProd = import.meta.env.PROD;
-  const lessons = (await getCollection('lessons')).filter(
+  const all = (await getCollection('lessons')).filter(
     (lesson) => !isProd || !lesson.data.draft,
   );
-  return lessons.map((lesson) => ({
-    params: { id: lesson.id },
-    props: { lesson },
-  }));
+
+  const bySequence = (a: (typeof all)[number], b: (typeof all)[number]) =>
+    (a.data.sequence_index ?? 0) - (b.data.sequence_index ?? 0);
+
+  return all.map((lesson) => {
+    const siblings = lesson.data.course_sequence
+      ? all
+          .filter(
+            (l) => l.data.course_sequence === lesson.data.course_sequence,
+          )
+          .sort(bySequence)
+      : [];
+    const pos = siblings.findIndex((l) => l.id === lesson.id);
+    return {
+      params: { id: lesson.id },
+      props: {
+        lesson,
+        prev: pos > 0 ? siblings[pos - 1] : null,
+        next: pos >= 0 && pos < siblings.length - 1 ? siblings[pos + 1] : null,
+      },
+    };
+  });
 }
 
-const { lesson } = Astro.props;
+const { lesson, prev, next } = Astro.props;
 const { Content } = await render(lesson);
 const { data } = lesson;
 
-// A minimal lesson page. The full canonical lesson template — consent-gated
-// video, structured transcript, equations, embedded lab, sources, previous/
-// next navigation — is built in the next commit (hub section 5.2).
+const dateFmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
 ---
 
-<BaseLayout
-  title={data.title}
-  description={data.summary}
-  index={!data.draft}
->
-  <article class="prose">
-    {data.draft && <p><span class="badge">brouillon</span></p>}
-    <h1>{data.title}</h1>
-    <p><em>{data.summary}</em></p>
-
-    <Content />
+<BaseLayout title={data.title} description={data.summary} index={!data.draft}>
+  <article class="prose lesson">
+    <header>
+      {data.draft && <p><span class="badge">brouillon</span></p>}
+      <h1>{data.title}</h1>
+      <p class="lesson__summary">{data.summary}</p>
+      <p class="lesson__facts">
+        <span class="badge">{data.level}</span>
+        {
+          data.duration_minutes && (
+            <span class="badge">~{data.duration_minutes} min</span>
+          )
+        }
+        {data.topics.map((topic) => <span class="badge">{topic}</span>)}
+      </p>
+    </header>
 
     {
-      data.lab_url && (
-        <p>
-          <a href={data.lab_url}>Ouvrir le laboratoire interactif</a>
-        </p>
+      data.youtube_id && (
+        <YouTubeEmbed id={data.youtube_id} title={`Vidéo — ${data.title}`} />
       )
     }
 
-    <hr />
-    <p>
-      Auteur : {data.authors.join(', ')}. Licence : {data.licence}.
-      {data.updated_at &&
-        ` Mis à jour le ${data.updated_at.toLocaleDateString('fr-FR')}.`}
-    </p>
+    {
+      data.objectives.length > 0 && (
+        <section aria-labelledby="objectifs">
+          <h2 id="objectifs">Objectifs</h2>
+          <ul>
+            {data.objectives.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      data.prerequisites.length > 0 && (
+        <section aria-labelledby="prerequis">
+          <h2 id="prerequis">Prérequis</h2>
+          <ul>
+            {data.prerequisites.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="contenu">
+      <h2 id="contenu">Explication</h2>
+      <Content />
+    </section>
+
+    {
+      data.lab_url && (
+        <section aria-labelledby="labo">
+          <h2 id="labo">Laboratoire interactif</h2>
+          <p>
+            <a href={data.lab_url}>Ouvrir le laboratoire en plein écran</a>
+          </p>
+        </section>
+      )
+    }
+
+    {
+      data.sources.length > 0 && (
+        <section aria-labelledby="sources">
+          <h2 id="sources">Sources et crédits</h2>
+          <ul>
+            {data.sources.map((source) => (
+              <li>
+                <a href={source.href} rel="noopener">
+                  {source.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <footer class="lesson__meta">
+      <p>
+        Auteur : {data.authors.join(', ')}. Licence : {data.licence}.
+        {
+          data.published_at &&
+            ` Publié le ${dateFmt.format(data.published_at)}.`
+        }
+        {data.updated_at && ` Révisé le ${dateFmt.format(data.updated_at)}.`}
+      </p>
+    </footer>
+
+    {
+      (prev || next) && (
+        <nav class="lesson__nav" aria-label="Leçons de la séquence">
+          {prev ? (
+            <a href={`/lessons/${prev.id}`} rel="prev">
+              ← {prev.data.title}
+            </a>
+          ) : (
+            <span />
+          )}
+          {next && (
+            <a href={`/lessons/${next.id}`} rel="next">
+              {next.data.title} →
+            </a>
+          )}
+        </nav>
+      )
+    }
   </article>
 </BaseLayout>
+
+<style>
+  .lesson__summary {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .lesson__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .lesson__meta {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .lesson__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+</style>

@@ -1,0 +1,148 @@
+---
+// Consent-controlled YouTube embed (hub section 7.3).
+//
+// No request reaches Google until the visitor explicitly activates the player:
+// the facade uses no external thumbnail and no iframe. On click it injects a
+// privacy-enhanced `youtube-nocookie.com` iframe. A direct YouTube link is
+// always present so the video is reachable without JavaScript or embedding.
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+const watchUrl = `https://www.youtube.com/watch?v=${id}`;
+---
+
+<figure class="yt">
+  <div class="yt__facade" data-yt-id={id} data-yt-title={title}>
+    <button
+      type="button"
+      class="yt__play"
+      aria-label={`Charger et lire la vidéo : ${title}`}
+    >
+      <svg viewBox="0 0 68 48" aria-hidden="true" focusable="false">
+        <path
+          class="yt__play-bg"
+          d="M66.5 7.7c-.8-2.9-3-5.2-6-6C55.4.7 34 .7 34 .7S12.6.7 7.5 1.7c-2.9.8-5.2 3-6 6C.5 12.8.5 24 .5 24s0 11.2 1 16.3c.8 2.9 3 5.2 6 6C12.6 47.3 34 47.3 34 47.3s21.4 0 26.5-1c2.9-.8 5.2-3 6-6 1-5.1 1-16.3 1-16.3s0-11.2-1-16.3z"
+        ></path>
+        <path class="yt__play-arrow" d="M45 24 27 14v20z"></path>
+      </svg>
+    </button>
+    <p class="yt__note">
+      En cliquant, la vidéo est chargée depuis YouTube
+      (<code>youtube-nocookie.com</code>), ce qui établit une connexion avec les
+      serveurs de Google. <a href={watchUrl} rel="noopener">Ouvrir directement
+      sur YouTube</a>.
+    </p>
+  </div>
+  <figcaption>{title}</figcaption>
+</figure>
+
+<script>
+  for (const facade of document.querySelectorAll<HTMLElement>('.yt__facade')) {
+    const button = facade.querySelector('.yt__play');
+    button?.addEventListener('click', () => {
+      const id = facade.dataset.ytId;
+      const title = facade.dataset.ytTitle ?? '';
+      if (!id) return;
+
+      const params = new URLSearchParams({
+        autoplay: '1',
+        rel: '0',
+        hl: 'fr',
+        cc_lang_pref: 'fr',
+        cc_load_policy: '1',
+      });
+
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?${params}`;
+      iframe.title = title;
+      iframe.loading = 'lazy';
+      iframe.allow =
+        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      iframe.className = 'yt__frame';
+      facade.replaceWith(iframe);
+    });
+  }
+</script>
+
+<style>
+  .yt {
+    margin: 1.5rem 0;
+  }
+
+  .yt__facade,
+  .yt__frame {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .yt__facade {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+    background:
+      radial-gradient(
+        circle at 50% 42%,
+        color-mix(in srgb, var(--color-accent) 12%, var(--color-surface)),
+        var(--color-surface)
+      );
+  }
+
+  .yt__frame {
+    border: 0;
+  }
+
+  .yt__play {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    width: clamp(56px, 12vw, 84px);
+  }
+
+  .yt__play svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .yt__play-bg {
+    fill: #212121;
+    opacity: 0.85;
+    transition: opacity 0.15s ease;
+  }
+
+  .yt__play:hover .yt__play-bg,
+  .yt__play:focus-visible .yt__play-bg {
+    fill: #c00;
+    opacity: 1;
+  }
+
+  .yt__play-arrow {
+    fill: #fff;
+  }
+
+  .yt__note {
+    max-width: 46ch;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+</style>

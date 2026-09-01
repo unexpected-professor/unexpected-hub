@@ -12,3 +12,10 @@ export const primaryNav: NavItem[] = [
   { label: 'Leçons', href: '/lessons' },
   { label: 'Laboratoires', href: '/labs' },
 ];
+
+export const footerNav: NavItem[] = [
+  { label: 'Licence et attribution', href: '/licence' },
+  { label: 'Confidentialité', href: '/confidentialite' },
+  { label: 'Mentions légales', href: '/mentions-legales' },
+  { label: 'Contact', href: '/contact' },
+];

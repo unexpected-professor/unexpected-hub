@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Confidentialité"
+  description="Données traitées par le site The Unexpected Professor : journaux serveur, contenus intégrés, absence de comptes et de suivi."
+  index={false}
+>
+  <div class="prose">
+    <h1>Confidentialité</h1>
+
+    <p>
+      <strong>Version provisoire.</strong> Cette page sera alignée sur la
+      configuration réelle du serveur (champs de journaux, durées de
+      conservation, hébergeur) avant l'ouverture publique.
+    </p>
+
+    <h2>Principe</h2>
+    <p>
+      Le site public ne crée aucun compte, ne propose ni formulaire ni dépôt de
+      fichier, et ne collecte aucune donnée propre aux étudiants. Les activités
+      pédagogiques évaluées et les données d'étudiants restent sur Moodle.
+    </p>
+
+    <h2>Journaux serveur</h2>
+    <p>
+      L'hébergeur et le serveur peuvent conserver temporairement des journaux
+      techniques contenant notamment l'adresse IP, l'horodatage et la page
+      demandée, à des fins de sécurité et de bon fonctionnement. Ces journaux
+      sont minimisés et purgés régulièrement.
+    </p>
+
+    <h2>Vidéos YouTube</h2>
+    <p>
+      Aucune vidéo YouTube n'est chargée tant que vous ne l'activez pas
+      explicitement. Lorsque vous cliquez pour lire une vidéo, le lecteur est
+      chargé depuis <code>youtube-nocookie.com</code> et une connexion est
+      alors établie avec les serveurs de Google, soumise à la politique de
+      confidentialité de Google. Un lien direct vers YouTube est toujours
+      proposé en alternative.
+    </p>
+
+    <h2>Mesure d'audience</h2>
+    <p>
+      Aucune mesure d'audience ni aucun traceur tiers n'est utilisé pendant la
+      phase pilote.
+    </p>
+
+    <h2>Vos droits</h2>
+    <p>
+      Pour toute question ou demande relative à vos données, utilisez la
+      <a href="/contact">page de contact</a>.
+    </p>
+  </div>
+</BaseLayout>

@@ -703,10 +703,10 @@ or documented decision.
 | UPH-012 | Hosting | Configure DNS and obtain HTTPS for canonical site and lab names | NOT STARTED | UPH-003, UPH-011 | — | 2026-09-01 |
 | UPH-013 | Site | Scaffold Astro static site and validated content collections | DONE | UPH-004, UPH-008 | `apps/site/`: Astro 5 static site, `src/content.config.ts` lesson schema (hub 5.3) validated by `astro check` (0 errors), pages for home/about/lessons/labs/404, sitemap + RSS, canonical URLs from `SITE_URL=https://theunexpectedprofessor.com`. `npm run build` produces 5 public pages; the sample lesson is `draft: true` and excluded from the production build. Commit 2 | 2026-09-01 |
 | UPH-014 | Site | Establish accessible temporary visual system and responsive navigation | VERIFY | UPH-001, UPH-013 | `apps/site/src/styles/global.css` + header/footer: token-based light/dark palette, fluid type, skip link, visible focus ring, `aria-current` nav, wraps at narrow widths. Pending: a formal keyboard/contrast/AT pass. Commit 2 | 2026-09-01 |
-| UPH-015 | Site | Implement canonical lesson template and navigation between lessons | NOT STARTED | UPH-013 | — | 2026-09-01 |
-| UPH-016 | Site | Add sitemap, feed, canonical metadata, error page, and basic SEO validation | NOT STARTED | UPH-013 | — | 2026-09-01 |
-| UPH-017 | Privacy | Add legal, privacy, licence, attribution, and contact pages | NOT STARTED | UPH-005, UPH-006, UPH-013 | — | 2026-09-01 |
-| UPH-018 | YouTube | Implement consent-controlled privacy-enhanced video component with direct-link fallback | NOT STARTED | UPH-013, UPH-017 | — | 2026-09-01 |
+| UPH-015 | Site | Implement canonical lesson template and navigation between lessons | DONE | UPH-013 | `apps/site/src/pages/lessons/[...id].astro`: title/summary/level/duration, consent-gated video, objectives, prerequisites, body, lab link, sources/credits, author+licence+dates, and previous/next navigation computed from `course_sequence` + `sequence_index`. Commit 3 | 2026-09-01 |
+| UPH-016 | Site | Add sitemap, feed, canonical metadata, error page, and basic SEO validation | DONE | UPH-013 | `@astrojs/sitemap` (`sitemap-index.xml`), `src/pages/rss.xml.js`, per-page canonical + OpenGraph in `BaseLayout`, `src/pages/404.astro`, `noindex` on drafts and provisional legal pages. Commits 2-3 | 2026-09-01 |
+| UPH-017 | Privacy | Add legal, privacy, licence, attribution, and contact pages | VERIFY | UPH-005, UPH-006, UPH-013 | `apps/site/src/pages/`: `mentions-legales`, `confidentialite`, `licence` (with attribution register), `contact`, linked from the footer. Content is marked provisional pending final host identification and the contact alias (see `documentation/legal-and-privacy-baseline.md`). Commit 3 | 2026-09-01 |
+| UPH-018 | YouTube | Implement consent-controlled privacy-enhanced video component with direct-link fallback | VERIFY | UPH-013, UPH-017 | `apps/site/src/components/YouTubeEmbed.astro`: no external request until an explicit click (no third-party thumbnail, no iframe), then injects a `youtube-nocookie.com` iframe with FR captions; always shows a direct `youtube.com/watch` link and an activation notice. Verified locally with the channel teaser `moCqX81pL2o` (served HTML contains no `<iframe>`). Pending: formal keyboard/AT pass and a check on a published lesson. Commit 3 | 2026-09-01 |
 | UPH-019 | Labs | Select and export the first approved Dash lab into the public repository | NOT STARTED | UPH-007, UPH-008 | Selected 2026-09-01: `new_course/images/plotting_python/cm1_dash/` (converter-foundations slice); export blocked on the UPH-007 asset audit | 2026-09-01 |
 | UPH-020 | Labs | Pin dependencies, add Gunicorn, Dockerfile, non-root runtime, and health check | NOT STARTED | UPH-019 | — | 2026-09-01 |
 | UPH-021 | Labs | Add physics unit tests, server smoke test, asset verification, and responsive visual checks | NOT STARTED | UPH-020 | — | 2026-09-01 |
@@ -886,6 +886,7 @@ supersedes it; link to the new decision or correction.
 | 2026-09-01 | UPH-002 / UPH-010 options research | RDAP-checked `.com` and `.fr` name candidates (all unregistered); compared registrars (OVHcloud, Gandi, Cloudflare, Porkbun, Netim) and EU VPS providers (Hetzner, netcup, OVHcloud, Contabo, Scaleway) against ADR-010/016 | `documentation/hosting-and-domain-options.md`: recommends canonical `theunexpectedprofessor.com` + `unexpectedprofessor.com` redirect via OVHcloud; Hetzner CX22 (~EUR 5) or OVHcloud VPS (~EUR 6) with provider snapshots + independent off-site backup | `docs(hub): research domain and VPS options` | Owner picks TLD/domain string/registrar (UPH-003) and VPS provider/region (UPH-010), then provision (UPH-011) |
 | 2026-09-01 | Registrar and host decision | Owner chose OVHcloud for both the domain and the VPS on one account; ruled out OVH shared web hosting (cannot run the Dash container); selected plan VPS-1 (2 vCore / 4 GB / 40 GB NVMe, ~EUR 4.6/month TTC) | ADR-018; `documentation/hosting-and-domain-options.md` updated with the VPS-1 spec and the shared-hosting exclusion; UPH-010 -> VERIFY | `docs(hub): choose OVHcloud for registrar and VPS` | Owner registers the domain (UPH-003), confirms the VPS region, and provisions VPS-1 with Ubuntu LTS + SSH keys + firewall (UPH-011); then UPH-012 DNS/TLS |
 | 2026-09-01 | Commit 2 — Astro site scaffold (Phase 1) | Owner registered `theunexpectedprofessor.com`. Installed nvm + Node 22 LTS (system Node 18.19.1 was below Astro 5's minimum). Scaffolded `apps/site/`: Astro 5 static build, validated lesson content schema, subject-based navigation, base token styles (light/dark), sitemap, RSS, canonical metadata, 404, and one draft sample lesson | `astro check` 0 errors/warnings; `npm run build` builds 5 public pages + `sitemap-index.xml` + `rss.xml`; draft lesson correctly excluded from the production build | Commit 2: `feat(site): scaffold the educational website` | Commit 3: canonical lesson template + consent-gated YouTube component + legal/privacy page structure (UPH-015, UPH-017, UPH-018) |
+| 2026-09-01 | Commit 3 — privacy-aware lesson media | Extended the lesson schema (duration, objectives, prerequisites, sources); built the canonical lesson template with previous/next sequence navigation; built `YouTubeEmbed.astro` (click-to-load facade, no request to Google before consent, `youtube-nocookie.com` after, always a direct link); added `mentions-legales`, `confidentialite`, `licence` (+ attribution register) and `contact` pages linked from the footer | `astro check` 0 errors (19 files); `npm run build` 9 pages; dev render of the lesson with channel teaser `moCqX81pL2o` shows the facade and contains no `<iframe>` until activated | Commit 3: `feat(site): add privacy-aware lesson media` | Commit 4: export + productionise `cm1_dash` into `apps/labs/converter-foundations/` (UPH-019/020/021) |
 
 ## 24. Known open questions
 
@@ -911,9 +912,9 @@ budget ceiling (ADR-016), first vertical slice (ADR-017).
 
 ## 25. Resume from here
 
-Phase 0 is complete and Phase 1 has started. Commits 0-1 plus the
-documentation commits and Commit 2 are published on `origin/main` through the
-dedicated `unexpected-professor` SSH identity.
+Phase 0 is complete and Phase 1 is well underway. Commits 0-3 plus the
+documentation commits are published on `origin/main` through the dedicated
+`unexpected-professor` SSH identity.
 
 Settled: repository boundary, licensing, identity, deployment model (Docker
 Compose + Caddy), budget ceiling, first vertical slice (`cm1_dash` converter
@@ -923,20 +924,19 @@ export; the three required changes (rebrand identifiers, flatten PNGs, drop the
 dev log) are applied during UPH-019. GitHub email privacy was reviewed and
 judged unnecessary.
 
-The Astro site scaffold (`apps/site/`) builds locally (`npm run build`, 0
-`astro check` errors). Node 22 LTS via nvm is required — see `apps/site/.nvmrc`.
+The Astro site (`apps/site/`) builds locally (`npm run build`, 0 `astro check`
+errors): scaffold, lesson template, consent-gated YouTube component, and
+provisional legal pages are in place. Node 22 LTS via nvm is required — see
+`apps/site/.nvmrc`.
 
 Next, in order:
 
-1. **Commit 3** — canonical lesson template (hub 5.2): consent-gated
-   privacy-enhanced YouTube component with direct-link fallback (UPH-018),
-   structured lesson body, previous/next navigation, sources block, and the
-   legal/privacy/licence/attribution page structure (UPH-017).
-2. **Commit 4** — export and productionise the `cm1_dash` lab into
+1. **Commit 4** — export and productionise the `cm1_dash` lab into
    `apps/labs/converter-foundations/` applying the three audit changes; add
    pinned deps, Gunicorn, a non-root Dockerfile, a health check, and tests
-   (UPH-019, UPH-020, UPH-021).
-3. **Provision the VPS** (UPH-011) once the local slice is verified: OVHcloud
+   (UPH-019, UPH-020, UPH-021). Then wire the lab URL into the pilot lesson and
+   check site-to-lab navigation locally — this closes Phase 1.
+2. **Provision the VPS** (UPH-011) once the local slice is verified: OVHcloud
    VPS-1, Ubuntu LTS, admin user, SSH keys, firewall, automatic updates; record
    the recurring cost and owner. Then Commit 5 (deployment stack) and UPH-012
    (DNS + HTTPS).

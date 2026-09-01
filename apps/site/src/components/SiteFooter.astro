@@ -1,9 +1,22 @@
 ---
+import { footerNav } from '../nav';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container">
+    <nav class="footer-nav" aria-label="Liens légaux">
+      <ul>
+        {
+          footerNav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
     <p>
       &copy; {year} The Unexpected Professor. Contenu pédagogique sous licence
       <a
@@ -11,17 +24,24 @@ const year = new Date().getFullYear();
         rel="license"
       >
         CC BY-SA 4.0</a
-      >, code sous licence GPL-3.0-only.
-    </p>
-    <p>
-      Vidéos sur
+      >, code sous licence GPL-3.0-only. Vidéos sur
       <a
         href="https://www.youtube.com/@TheUnexpectedProfessor"
         rel="me noopener"
       >
         YouTube</a
-      >. Les mentions légales et la politique de confidentialité seront
-      publiées avant la mise en ligne publique.
+      >.
     </p>
   </div>
 </footer>
+
+<style>
+  .footer-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+    list-style: none;
+    margin: 0 0 0.75rem;
+    padding: 0;
+  }
+</style>

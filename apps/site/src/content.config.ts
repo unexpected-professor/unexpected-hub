@@ -14,9 +14,15 @@ const lessons = defineCollection({
     level: z
       .enum(['secondary', 'undergraduate', 'graduate', 'professional'])
       .default('undergraduate'),
+    duration_minutes: z.number().int().positive().optional(),
     topics: z.array(z.string()).default([]),
     course_sequence: z.string().optional(),
     sequence_index: z.number().int().nonnegative().optional(),
+    objectives: z.array(z.string()).default([]),
+    prerequisites: z.array(z.string()).default([]),
+    sources: z
+      .array(z.object({ label: z.string(), href: z.string().url() }))
+      .default([]),
     youtube_id: z.string().nullable().default(null),
     lab_url: z.string().url().nullable().default(null),
     published_at: z.coerce.date().nullable().default(null),

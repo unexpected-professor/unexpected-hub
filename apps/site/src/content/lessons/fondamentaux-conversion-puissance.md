@@ -6,10 +6,19 @@ summary: >-
   la puissance à travers un convertisseur.
 language: "fr"
 level: "undergraduate"
+duration_minutes: 20
 topics: ["electronique-de-puissance", "convertisseur-buck"]
 course_sequence: "fondamentaux-conversion"
 sequence_index: 1
-youtube_id: null
+objectives:
+  - "Distinguer valeur moyenne et valeur efficace sur une grandeur pulsée."
+  - "Lire un point de fonctionnement dans le plan tension-courant."
+  - "Relier la puissance d'entrée et la puissance de sortie d'un convertisseur idéal."
+prerequisites:
+  - "Lois des circuits en régime continu (loi d'Ohm, diviseur de tension)."
+  - "Notion de valeur moyenne d'un signal périodique."
+sources: []
+youtube_id: "moCqX81pL2o"
 lab_url: null
 published_at: null
 updated_at: null
@@ -20,8 +29,8 @@ course_ref: "Energie S3 / CM1"
 ---
 
 Cette leçon est un **brouillon de démonstration** pour valider le gabarit de
-contenu. Le texte pédagogique complet, la vidéo et le laboratoire interactif
-sont ajoutés dans les étapes suivantes du projet.
+contenu et le lecteur vidéo à consentement. Le texte pédagogique complet et le
+laboratoire interactif sont ajoutés dans les étapes suivantes du projet.
 
 ## Progression prévue
 
@@ -32,10 +41,3 @@ sont ajoutés dans les étapes suivantes du projet.
 4. Convertisseur Buck : filtrage par `L`, raisonnement en valeurs moyennes sur
    le plan iso-puissance.
 5. Ajout du condensateur de sortie `C`.
-
-## Objectifs
-
-- Distinguer valeur moyenne et valeur efficace sur une grandeur pulsée.
-- Lire un point de fonctionnement dans le plan tension-courant.
-- Relier la puissance d'entrée et la puissance de sortie d'un convertisseur
-  idéal.
