@@ -72,14 +72,18 @@ def three_pane_shell(left_content, center_content, right_content,
     """The collapsible left-controls / center-graphs / right-sliders layout, with the
     pane-toggle buttons living in bordered "handle" divs at the seams so they stay visible
     (and clickable) even when their pane is hidden."""
+    # `three-pane*` class names let assets/responsive.css stack the panes
+    # vertically below a width threshold (narrow window or embedded iframe),
+    # overriding the inline flex styles that the collapse callbacks also set.
     return html.Div([
-        html.Div(left_content, id=left_pane_id, style=LEFT_PANE_STYLE),
+        html.Div(left_content, id=left_pane_id, className='three-pane__pane', style=LEFT_PANE_STYLE),
         html.Div(dbc.Button('◂', id=toggle_left_id, size='sm', outline=True, color='secondary',
-                             className='px-1 py-0'), style=LEFT_HANDLE_STYLE),
+                             className='px-1 py-0'), className='three-pane__handle', style=LEFT_HANDLE_STYLE),
         dbc.Tooltip(t('tt_pane_toggle'), target=toggle_left_id, placement='auto', id=f'tt-{toggle_left_id}'),
-        html.Div(center_content, id=center_pane_id, style={'flex': '1 1 auto', 'minWidth': 0}),
+        html.Div(center_content, id=center_pane_id, className='three-pane__center',
+                 style={'flex': '1 1 auto', 'minWidth': 0}),
         html.Div(dbc.Button('▸', id=toggle_right_id, size='sm', outline=True, color='secondary',
-                             className='px-1 py-0'), style=RIGHT_HANDLE_STYLE),
+                             className='px-1 py-0'), className='three-pane__handle', style=RIGHT_HANDLE_STYLE),
         dbc.Tooltip(t('tt_pane_toggle'), target=toggle_right_id, placement='auto', id=f'tt-{toggle_right_id}'),
-        html.Div(right_content, id=right_pane_id, style=RIGHT_PANE_STYLE),
-    ], style={'display': 'flex', 'alignItems': 'flex-start'})
+        html.Div(right_content, id=right_pane_id, className='three-pane__pane', style=RIGHT_PANE_STYLE),
+    ], className='three-pane', style={'display': 'flex', 'alignItems': 'flex-start'})

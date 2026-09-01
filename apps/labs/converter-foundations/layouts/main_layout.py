@@ -81,9 +81,13 @@ left_pane_content = [
     dbc.Tooltip(t('tt_switch_select'), target='t2-select', placement='auto', id='tt-t2-select'),
 ]
 
+# Graphs sit side by side only when there is real room (>= 1400 px: the lab
+# open full-screen on a wide display); otherwise they stack.
 center_pane_content = dbc.Row([
-    dbc.Col(dcc.Graph(id='vi-plane-graph', style={'height': '62vh'}, config=GRAPH_CONFIG), width=6, id='col-vi'),
-    dbc.Col(dcc.Graph(id='chrono-graph', style={'height': '62vh'}, config=GRAPH_CONFIG), width=6, id='col-chrono'),
+    dbc.Col(dcc.Graph(id='vi-plane-graph', style={'height': '62vh'}, config=GRAPH_CONFIG),
+            xs=12, xxl=6, id='col-vi'),
+    dbc.Col(dcc.Graph(id='chrono-graph', style={'height': '62vh'}, config=GRAPH_CONFIG),
+            xs=12, xxl=6, id='col-chrono'),
 ])
 
 right_pane_content = [

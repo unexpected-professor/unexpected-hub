@@ -41,118 +41,133 @@ const dateFmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
 ---
 
 <BaseLayout title={data.title} description={data.summary} index={!data.draft}>
-  <article class="prose lesson">
-    <header>
-      {data.draft && <p><span class="badge">brouillon</span></p>}
-      <h1>{data.title}</h1>
-      <p class="lesson__summary">{data.summary}</p>
-      <p class="lesson__facts">
-        <span class="badge">{data.level}</span>
-        {
-          data.duration_minutes && (
-            <span class="badge">~{data.duration_minutes} min</span>
-          )
-        }
-        {data.topics.map((topic) => <span class="badge">{topic}</span>)}
-      </p>
-    </header>
+  <article class="lesson">
+    <div class="prose">
+      <header>
+        {data.draft && <p><span class="badge">brouillon</span></p>}
+        <h1>{data.title}</h1>
+        <p class="lesson__summary">{data.summary}</p>
+        <p class="lesson__facts">
+          <span class="badge">{data.level}</span>
+          {
+            data.duration_minutes && (
+              <span class="badge">~{data.duration_minutes} min</span>
+            )
+          }
+          {data.topics.map((topic) => <span class="badge">{topic}</span>)}
+        </p>
+      </header>
 
-    {
-      data.youtube_id && (
-        <YouTubeEmbed id={data.youtube_id} title={`Vidéo — ${data.title}`} />
-      )
-    }
+      {
+        data.youtube_id && (
+          <YouTubeEmbed id={data.youtube_id} title={`Vidéo — ${data.title}`} />
+        )
+      }
 
-    {
-      data.objectives.length > 0 && (
-        <section aria-labelledby="objectifs">
-          <h2 id="objectifs">Objectifs</h2>
-          <ul>
-            {data.objectives.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+      {
+        data.objectives.length > 0 && (
+          <section aria-labelledby="objectifs">
+            <h2 id="objectifs">Objectifs</h2>
+            <ul>
+              {data.objectives.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
-    {
-      data.prerequisites.length > 0 && (
-        <section aria-labelledby="prerequis">
-          <h2 id="prerequis">Prérequis</h2>
-          <ul>
-            {data.prerequisites.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+      {
+        data.prerequisites.length > 0 && (
+          <section aria-labelledby="prerequis">
+            <h2 id="prerequis">Prérequis</h2>
+            <ul>
+              {data.prerequisites.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
-    <section aria-labelledby="contenu">
-      <h2 id="contenu">Explication</h2>
-      <Content />
-    </section>
+      <section aria-labelledby="contenu">
+        <h2 id="contenu">Explication</h2>
+        <Content />
+      </section>
+    </div>
 
     {
       data.lab_url && (
-        <section aria-labelledby="labo">
+        <section class="lesson__lab" aria-labelledby="labo">
           <h2 id="labo">Laboratoire interactif</h2>
           <LabEmbed url={data.lab_url} title={`Laboratoire — ${data.title}`} />
         </section>
       )
     }
 
-    {
-      data.sources.length > 0 && (
-        <section aria-labelledby="sources">
-          <h2 id="sources">Sources et crédits</h2>
-          <ul>
-            {data.sources.map((source) => (
-              <li>
-                <a href={source.href} rel="noopener">
-                  {source.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+    <div class="prose">
+      {
+        data.sources.length > 0 && (
+          <section aria-labelledby="sources">
+            <h2 id="sources">Sources et crédits</h2>
+            <ul>
+              {data.sources.map((source) => (
+                <li>
+                  <a href={source.href} rel="noopener">
+                    {source.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
-    <footer class="lesson__meta">
-      <p>
-        Auteur : {data.authors.join(', ')}. Licence : {data.licence}.
-        {
-          data.published_at &&
-            ` Publié le ${dateFmt.format(data.published_at)}.`
-        }
-        {data.updated_at && ` Révisé le ${dateFmt.format(data.updated_at)}.`}
-      </p>
-    </footer>
+      <footer class="lesson__meta">
+        <p>
+          Auteur : {data.authors.join(', ')}. Licence : {data.licence}.
+          {
+            data.published_at &&
+              ` Publié le ${dateFmt.format(data.published_at)}.`
+          }
+          {data.updated_at && ` Révisé le ${dateFmt.format(data.updated_at)}.`}
+        </p>
+      </footer>
 
-    {
-      (prev || next) && (
-        <nav class="lesson__nav" aria-label="Leçons de la séquence">
-          {prev ? (
-            <a href={`/lessons/${prev.id}`} rel="prev">
-              ← {prev.data.title}
-            </a>
-          ) : (
-            <span />
-          )}
-          {next && (
-            <a href={`/lessons/${next.id}`} rel="next">
-              {next.data.title} →
-            </a>
-          )}
-        </nav>
-      )
-    }
+      {
+        (prev || next) && (
+          <nav class="lesson__nav" aria-label="Leçons de la séquence">
+            {prev ? (
+              <a href={`/lessons/${prev.id}`} rel="prev">
+                ← {prev.data.title}
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a href={`/lessons/${next.id}`} rel="next">
+                {next.data.title} →
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </div>
   </article>
 </BaseLayout>
 
 <style>
+  /* The lab section breaks out of the reading column: the Dash three-pane
+     layout needs the full content width to stay side by side, and stacks
+     itself below its own breakpoint. */
+  .lesson__lab {
+    margin-block: 2rem;
+  }
+
+  .lesson__lab > h2 {
+    margin-top: 0;
+  }
+
   .lesson__summary {
     font-size: 1.1rem;
     color: var(--color-text-muted);

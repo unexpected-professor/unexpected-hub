@@ -61,10 +61,11 @@ comment at the top of `requirements.txt`.
 
 ## Responsive behaviour
 
-The three-pane layout is designed for tablet width and above. On a narrow
-phone the panes stack and the graphs become cramped; the lesson links to the
-lab full-screen and recommends a larger screen. A dedicated compact layout is
-out of scope for the pilot.
+`assets/responsive.css` stacks the three panes vertically below 992 px (a
+small window, or the lab embedded in a lesson page); the seam handles are
+hidden and all three panes stay visible. The graphs stack vertically until
+1400 px, where they move side by side. On a phone the lab is still tight — the
+lesson embed hides the iframe below ~34 rem and links out to a full tab.
 
 ## Provenance and licence
 

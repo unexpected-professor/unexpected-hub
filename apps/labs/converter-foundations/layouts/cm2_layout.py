@@ -87,9 +87,9 @@ cm2_left_pane_content = [
 cm2_center_pane_content = html.Div([
     dbc.Row([
         dbc.Col(dcc.Graph(id='cm2-vi-plane-graph', style={'height': '45vh'}, config=GRAPH_CONFIG),
-                width=6, id='cm2-col-vi'),
+                xs=12, xxl=6, id='cm2-col-vi'),
         dbc.Col(dcc.Graph(id='cm2-chrono-graph', style={'height': '45vh'}, config=GRAPH_CONFIG),
-                width=6, id='cm2-col-chrono'),
+                xs=12, xxl=6, id='cm2-col-chrono'),
     ]),
     dbc.Row([
         dbc.Col(dcc.Graph(id='cm2-voutd-graph', style={'height': '28vh'}, config=GRAPH_CONFIG),

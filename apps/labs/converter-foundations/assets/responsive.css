@@ -1,0 +1,37 @@
+/* Narrow-viewport layout for the laboratory.
+ *
+ * The default is a side-by-side three-pane layout (controls / graphs /
+ * sliders). Below 992 px — a small window, or the lab embedded in a lesson
+ * page — that does not fit, so the panes stack vertically. The rules use
+ * !important because the pane widths are set as inline styles, both initially
+ * and by the collapse callbacks. */
+
+@media (max-width: 992px) {
+  .three-pane {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .three-pane__pane,
+  .three-pane__center {
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-top: 0.75rem !important;
+    min-width: 0 !important;
+  }
+
+  /* The seam handles only make sense between side-by-side panes. */
+  .three-pane__handle {
+    display: none !important;
+  }
+
+  /* Give the stacked control / slider panes a light separator. */
+  .three-pane__center {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    margin-block: 0.5rem;
+    padding-block: 0.75rem;
+  }
+}
