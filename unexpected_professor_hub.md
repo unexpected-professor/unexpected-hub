@@ -369,13 +369,20 @@ wordmark and colour system are acceptable for the first release.
 
 ### 7.4 Dashboard integration
 
-The initial site should link to a full-screen dashboard. An embedded iframe can
-be added after responsive behaviour and browser policies have been tested.
-Every embedded lab must also have a visible full-screen link.
+**Amended 2026-09-01.** The lesson template now embeds the lab inline at a
+readable size (not full-screen) via `LabEmbed.astro`, with two always-visible
+controls: open in a new tab, and full-screen. Below ~34rem the frame is
+replaced by the open-in-a-new-tab link because the lab is cramped on a phone.
+The lab is first-party (its own subdomain) so it loads without a consent gate,
+unlike the YouTube embed. The reverse proxy must still set the site's CSP
+`frame-src` and the lab's `frame-ancestors` for the cross-subdomain embed to
+work in production (Commit 5). The original plan was to ship a plain full-screen
+link first and add the iframe later; the embed was brought forward on request.
 
-Subdomains are preferred for the pilot because the current Dash application
-runs at its URL root. Hosting several Dash applications under path prefixes
-would require consistent `requests_pathname_prefix` and asset-path handling.
+Subdomains are preferred for the pilot because the Dash application runs at its
+URL root, and the `frame-ancestors` allow-list simply names the canonical site
+origin. Hosting several Dash applications under path prefixes would require
+consistent `requests_pathname_prefix` and asset-path handling.
 
 ## 8. Dash production specification
 
@@ -888,6 +895,7 @@ supersedes it; link to the new decision or correction.
 | 2026-09-01 | Commit 2 — Astro site scaffold (Phase 1) | Owner registered `theunexpectedprofessor.com`. Installed nvm + Node 22 LTS (system Node 18.19.1 was below Astro 5's minimum). Scaffolded `apps/site/`: Astro 5 static build, validated lesson content schema, subject-based navigation, base token styles (light/dark), sitemap, RSS, canonical metadata, 404, and one draft sample lesson | `astro check` 0 errors/warnings; `npm run build` builds 5 public pages + `sitemap-index.xml` + `rss.xml`; draft lesson correctly excluded from the production build | Commit 2: `feat(site): scaffold the educational website` | Commit 3: canonical lesson template + consent-gated YouTube component + legal/privacy page structure (UPH-015, UPH-017, UPH-018) |
 | 2026-09-01 | Commit 3 — privacy-aware lesson media | Extended the lesson schema (duration, objectives, prerequisites, sources); built the canonical lesson template with previous/next sequence navigation; built `YouTubeEmbed.astro` (click-to-load facade, no request to Google before consent, `youtube-nocookie.com` after, always a direct link); added `mentions-legales`, `confidentialite`, `licence` (+ attribution register) and `contact` pages linked from the footer | `astro check` 0 errors (19 files); `npm run build` 9 pages; dev render of the lesson with channel teaser `moCqX81pL2o` shows the facade and contains no `<iframe>` until activated | Commit 3: `feat(site): add privacy-aware lesson media` | Commit 4: export + productionise `cm1_dash` into `apps/labs/converter-foundations/` (UPH-019/020/021) |
 | 2026-09-01 | Commit 4 — productionise the first laboratory | Exported `cm1_dash` to `apps/labs/converter-foundations/` by file copy; removed course identifiers from the UI title/tabs/comments; flattened all 11 circuit PNGs (714 KB → 324 KB); pinned deps + full lock; added `gunicorn.conf.py`, a non-root `Dockerfile` with `/healthz` + `HEALTHCHECK`, 39 pytest cases, and a fresh README; wired the draft pilot lesson's `lab_url` to the local lab for a site-to-lab check | `pytest` 39 passed; `gunicorn app:server` serves `/`, `/healthz`, `/_dash-layout`, `/assets/*` (all 200); `docker build` → 94 MB image runs as UID 10001 and reports `healthy`; site `npm run build` still 0 errors and the lesson page links to the lab | Commit 4: `feat(labs): productionize the first Dash laboratory` | Provision OVHcloud VPS-1 (UPH-011), then Commit 5 (deployment stack) and UPH-012 (DNS + HTTPS) |
+| 2026-09-01 | Lab embed UX | Replaced the plain full-screen link with `LabEmbed.astro`: the lab is shown inline at a readable size with always-visible "new tab" and "full-screen" controls; below ~34rem the frame is swapped for the new-tab link. Amended hub section 7.4 accordingly | `astro check` 0 errors; dev render shows the iframe, both controls, and the narrow-screen fallback | `feat(site): embed the lab with new-tab and full-screen controls` | Production still needs CSP `frame-src` + lab `frame-ancestors` in Commit 5 |
 
 ## 24. Known open questions
 

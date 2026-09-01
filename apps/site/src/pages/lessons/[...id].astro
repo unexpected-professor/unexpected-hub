@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
+import LabEmbed from '../../components/LabEmbed.astro';
 
 export async function getStaticPaths() {
   const isProd = import.meta.env.PROD;
@@ -97,9 +98,7 @@ const dateFmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
       data.lab_url && (
         <section aria-labelledby="labo">
           <h2 id="labo">Laboratoire interactif</h2>
-          <p>
-            <a href={data.lab_url}>Ouvrir le laboratoire en plein écran</a>
-          </p>
+          <LabEmbed url={data.lab_url} title={`Laboratoire — ${data.title}`} />
         </section>
       )
     }

@@ -35,7 +35,9 @@ const labs = (await getCollection('lessons'))
             <h3>{lesson.data.title}</h3>
             <p>{lesson.data.summary}</p>
             <p>
-              <a href={lesson.data.lab_url}>Ouvrir en plein écran</a>
+              <a href={lesson.data.lab_url} target="_blank" rel="noopener">
+                Ouvrir le laboratoire ↗
+              </a>
             </p>
           </li>
         ))}
