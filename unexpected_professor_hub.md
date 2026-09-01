@@ -5,7 +5,7 @@
 | Field | Current value |
 |---|---|
 | Document role | Canonical overview and resume point for The Unexpected Professor publishing platform |
-| Status | Phase 1 — local vertical slice in progress (Phase 0 complete) |
+| Status | Phase 1 local vertical slice complete; Phase 2 (self-hosted pilot) next |
 | Created | 2026-09-01 |
 | Last updated | 2026-09-01 |
 | Confirmed public name | The Unexpected Professor |
@@ -707,9 +707,9 @@ or documented decision.
 | UPH-016 | Site | Add sitemap, feed, canonical metadata, error page, and basic SEO validation | DONE | UPH-013 | `@astrojs/sitemap` (`sitemap-index.xml`), `src/pages/rss.xml.js`, per-page canonical + OpenGraph in `BaseLayout`, `src/pages/404.astro`, `noindex` on drafts and provisional legal pages. Commits 2-3 | 2026-09-01 |
 | UPH-017 | Privacy | Add legal, privacy, licence, attribution, and contact pages | VERIFY | UPH-005, UPH-006, UPH-013 | `apps/site/src/pages/`: `mentions-legales`, `confidentialite`, `licence` (with attribution register), `contact`, linked from the footer. Content is marked provisional pending final host identification and the contact alias (see `documentation/legal-and-privacy-baseline.md`). Commit 3 | 2026-09-01 |
 | UPH-018 | YouTube | Implement consent-controlled privacy-enhanced video component with direct-link fallback | VERIFY | UPH-013, UPH-017 | `apps/site/src/components/YouTubeEmbed.astro`: no external request until an explicit click (no third-party thumbnail, no iframe), then injects a `youtube-nocookie.com` iframe with FR captions; always shows a direct `youtube.com/watch` link and an activation notice. Verified locally with the channel teaser `moCqX81pL2o` (served HTML contains no `<iframe>`). Pending: formal keyboard/AT pass and a check on a published lesson. Commit 3 | 2026-09-01 |
-| UPH-019 | Labs | Select and export the first approved Dash lab into the public repository | NOT STARTED | UPH-007, UPH-008 | Selected 2026-09-01: `new_course/images/plotting_python/cm1_dash/` (converter-foundations slice); export blocked on the UPH-007 asset audit | 2026-09-01 |
-| UPH-020 | Labs | Pin dependencies, add Gunicorn, Dockerfile, non-root runtime, and health check | NOT STARTED | UPH-019 | — | 2026-09-01 |
-| UPH-021 | Labs | Add physics unit tests, server smoke test, asset verification, and responsive visual checks | NOT STARTED | UPH-020 | — | 2026-09-01 |
+| UPH-019 | Labs | Select and export the first approved Dash lab into the public repository | DONE | UPH-007, UPH-008 | `apps/labs/converter-foundations/`: exported by file copy from `cm1_dash`; 3 audit changes applied — course identifiers removed from the UI title, tab labels, and comments; 11 PNGs flattened (714 KB → 324 KB, no `mxfile` chunk); dev log dropped; fresh README. Commit 4 | 2026-09-01 |
+| UPH-020 | Labs | Pin dependencies, add Gunicorn, Dockerfile, non-root runtime, and health check | DONE | UPH-019 | `requirements.txt` (direct pins) + `requirements.lock` (full freeze); `gunicorn.conf.py` with documented, env-overridable workers/threads/timeout; `Dockerfile` (python:3.12-slim, non-root UID 10001, 94 MB) with `/healthz` route and `HEALTHCHECK`; container runs and reports `healthy`. Commit 4 | 2026-09-01 |
+| UPH-021 | Labs | Add physics unit tests, server smoke test, asset verification, and responsive visual checks | DONE | UPH-020 | `tests/` — 39 pytest cases: analytic Buck/Boost CCM/DCM checks, `server` import + HTTP smoke (`/`, `/healthz`, `/_dash-layout`, `/assets/*`), `debug is False`, and asset checks (every referenced circuit image exists, no PNG carries an `mxfile` chunk). Narrow-phone behaviour documented in the lab README (stack + full-screen recommendation). Commit 4 | 2026-09-01 |
 | UPH-022 | Deployment | Add production Compose/deployment definitions without secrets | NOT STARTED | UPH-009, UPH-013, UPH-020 | — | 2026-09-01 |
 | UPH-023 | Deployment | Add automated build, validation, deployment, deployed-SHA record, and rollback | NOT STARTED | UPH-011, UPH-022 | — | 2026-09-01 |
 | UPH-024 | Pilot content | Publish one complete lesson with text, sources, video or placeholder, and lab link | NOT STARTED | UPH-015, UPH-018, UPH-021 | — | 2026-09-01 |
@@ -887,6 +887,7 @@ supersedes it; link to the new decision or correction.
 | 2026-09-01 | Registrar and host decision | Owner chose OVHcloud for both the domain and the VPS on one account; ruled out OVH shared web hosting (cannot run the Dash container); selected plan VPS-1 (2 vCore / 4 GB / 40 GB NVMe, ~EUR 4.6/month TTC) | ADR-018; `documentation/hosting-and-domain-options.md` updated with the VPS-1 spec and the shared-hosting exclusion; UPH-010 -> VERIFY | `docs(hub): choose OVHcloud for registrar and VPS` | Owner registers the domain (UPH-003), confirms the VPS region, and provisions VPS-1 with Ubuntu LTS + SSH keys + firewall (UPH-011); then UPH-012 DNS/TLS |
 | 2026-09-01 | Commit 2 — Astro site scaffold (Phase 1) | Owner registered `theunexpectedprofessor.com`. Installed nvm + Node 22 LTS (system Node 18.19.1 was below Astro 5's minimum). Scaffolded `apps/site/`: Astro 5 static build, validated lesson content schema, subject-based navigation, base token styles (light/dark), sitemap, RSS, canonical metadata, 404, and one draft sample lesson | `astro check` 0 errors/warnings; `npm run build` builds 5 public pages + `sitemap-index.xml` + `rss.xml`; draft lesson correctly excluded from the production build | Commit 2: `feat(site): scaffold the educational website` | Commit 3: canonical lesson template + consent-gated YouTube component + legal/privacy page structure (UPH-015, UPH-017, UPH-018) |
 | 2026-09-01 | Commit 3 — privacy-aware lesson media | Extended the lesson schema (duration, objectives, prerequisites, sources); built the canonical lesson template with previous/next sequence navigation; built `YouTubeEmbed.astro` (click-to-load facade, no request to Google before consent, `youtube-nocookie.com` after, always a direct link); added `mentions-legales`, `confidentialite`, `licence` (+ attribution register) and `contact` pages linked from the footer | `astro check` 0 errors (19 files); `npm run build` 9 pages; dev render of the lesson with channel teaser `moCqX81pL2o` shows the facade and contains no `<iframe>` until activated | Commit 3: `feat(site): add privacy-aware lesson media` | Commit 4: export + productionise `cm1_dash` into `apps/labs/converter-foundations/` (UPH-019/020/021) |
+| 2026-09-01 | Commit 4 — productionise the first laboratory | Exported `cm1_dash` to `apps/labs/converter-foundations/` by file copy; removed course identifiers from the UI title/tabs/comments; flattened all 11 circuit PNGs (714 KB → 324 KB); pinned deps + full lock; added `gunicorn.conf.py`, a non-root `Dockerfile` with `/healthz` + `HEALTHCHECK`, 39 pytest cases, and a fresh README; wired the draft pilot lesson's `lab_url` to the local lab for a site-to-lab check | `pytest` 39 passed; `gunicorn app:server` serves `/`, `/healthz`, `/_dash-layout`, `/assets/*` (all 200); `docker build` → 94 MB image runs as UID 10001 and reports `healthy`; site `npm run build` still 0 errors and the lesson page links to the lab | Commit 4: `feat(labs): productionize the first Dash laboratory` | Provision OVHcloud VPS-1 (UPH-011), then Commit 5 (deployment stack) and UPH-012 (DNS + HTTPS) |
 
 ## 24. Known open questions
 
@@ -912,33 +913,41 @@ budget ceiling (ADR-016), first vertical slice (ADR-017).
 
 ## 25. Resume from here
 
-Phase 0 is complete and Phase 1 is well underway. Commits 0-3 plus the
-documentation commits are published on `origin/main` through the dedicated
-`unexpected-professor` SSH identity.
+Phase 0 is complete and the **Phase 1 local vertical slice is done**. Commits
+0-4 plus the documentation commits are published on `origin/main` through the
+dedicated `unexpected-professor` SSH identity.
 
 Settled: repository boundary, licensing, identity, deployment model (Docker
-Compose + Caddy), budget ceiling, first vertical slice (`cm1_dash` converter
-foundations), registrar and host (OVHcloud, ADR-018). `theunexpectedprofessor.com`
-is registered. UPH-007 is DONE — the `cm1_dash` audit cleared the pilot for
-export; the three required changes (rebrand identifiers, flatten PNGs, drop the
-dev log) are applied during UPH-019. GitHub email privacy was reviewed and
-judged unnecessary.
+Compose + Caddy), budget ceiling, first vertical slice, registrar and host
+(OVHcloud, ADR-018). `theunexpectedprofessor.com` is registered. GitHub email
+privacy was reviewed and judged unnecessary.
 
-The Astro site (`apps/site/`) builds locally (`npm run build`, 0 `astro check`
-errors): scaffold, lesson template, consent-gated YouTube component, and
-provisional legal pages are in place. Node 22 LTS via nvm is required — see
-`apps/site/.nvmrc`.
+Local slice state:
 
-Next, in order:
+- `apps/site/` — Astro site builds clean; scaffold, canonical lesson template,
+  consent-gated YouTube component (verified with teaser `moCqX81pL2o`),
+  provisional legal pages. Node 22 LTS via nvm — see `apps/site/.nvmrc`.
+- `apps/labs/converter-foundations/` — exported and audited; Gunicorn +
+  non-root Docker image (94 MB, `healthy`); 39 pytest cases pass; `/healthz`
+  route. Python 3.12 (`.python-version`).
+- The draft pilot lesson links to the lab (`lab_url` points at the local lab
+  port for now); site-to-lab navigation works locally.
 
-1. **Commit 4** — export and productionise the `cm1_dash` lab into
-   `apps/labs/converter-foundations/` applying the three audit changes; add
-   pinned deps, Gunicorn, a non-root Dockerfile, a health check, and tests
-   (UPH-019, UPH-020, UPH-021). Then wire the lab URL into the pilot lesson and
-   check site-to-lab navigation locally — this closes Phase 1.
-2. **Provision the VPS** (UPH-011) once the local slice is verified: OVHcloud
-   VPS-1, Ubuntu LTS, admin user, SSH keys, firewall, automatic updates; record
-   the recurring cost and owner. Then Commit 5 (deployment stack) and UPH-012
-   (DNS + HTTPS).
+Phase 1 acceptance (hub section 18) is met apart from a formal mobile pass on
+the lesson page.
+
+Next (Phase 2), in order:
+
+1. **Provision the VPS** (UPH-011) — this is the owner's action: OVHcloud
+   VPS-1, Ubuntu LTS, Gravelines or Strasbourg; admin user, SSH keys,
+   firewall, automatic security updates; record the recurring cost and owner.
+   A natural point to move to a hub-rooted session.
+2. **Commit 5** (`chore(deploy): add self-hosted production stack`) — Compose +
+   Caddy config, proxy routing for the site and the lab subdomain, CSP and
+   `frame-ancestors`, `.env.example`, rollback notes (UPH-022).
+3. **UPH-012** — DNS records + automatic HTTPS for the canonical site and lab
+   hostnames.
+4. **Commit 6** — publish the first integrated lesson (real text, sources,
+   video, production lab URL), then Moodle handoff (UPH-024, UPH-027).
 
 Do not copy course assets beyond the audited `cm1_dash` material.

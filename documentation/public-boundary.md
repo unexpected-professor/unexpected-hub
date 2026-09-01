@@ -79,7 +79,9 @@ include:
 
 | Asset | Creator/source | Original licence | Modifications | Public destination | Verified by/date |
 |---|---|---|---|---|---|
-| _No assets imported yet_ | — | — | — | — | — |
+| `case_1..5[_D].drawio.png` (7 files) | The Unexpected Professor, draw.io | Author's own → `CC-BY-SA-4.0` | Flattened (embedded `mxfile` chunk removed) | `apps/labs/converter-foundations/assets/` | Owner / 2026-09-01 |
+| `Buck_chopper_1/2.drawio.png`, `Boost_chopper_1/2.drawio.png` (4 files) | The Unexpected Professor, draw.io | Author's own → `CC-BY-SA-4.0` | Flattened (embedded `mxfile` chunk removed) | `apps/labs/converter-foundations/assets/` | Owner / 2026-09-01 |
+| `app.py`, `i18n.py`, `models/*`, `layouts/*`, `callbacks/*` | The Unexpected Professor | Author's own → `GPL-3.0-only` | Course identifiers removed from UI text and comments; production entry point, health route, Gunicorn/Docker added | `apps/labs/converter-foundations/` | Owner / 2026-09-01 |
 
 ## Boundary review triggers
 

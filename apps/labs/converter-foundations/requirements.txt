@@ -1,0 +1,12 @@
+# Direct runtime dependencies (pinned). The full transitive lock used for the
+# production image is requirements.lock — regenerate both together:
+#
+#   python -m venv .venv && . .venv/bin/activate
+#   pip install -r requirements.txt
+#   pip freeze --exclude-editable | sort > requirements.lock
+#
+dash==4.4.1
+dash-bootstrap-components==2.0.4
+plotly==7.0.0
+numpy==2.5.2
+gunicorn==26.2.0

@@ -19,7 +19,9 @@ prerequisites:
   - "Notion de valeur moyenne d'un signal périodique."
 sources: []
 youtube_id: "moCqX81pL2o"
-lab_url: null
+# Draft points at the local lab (apps/labs/converter-foundations, `python app.py`).
+# Replaced with the production lab subdomain when the lesson is published.
+lab_url: "http://localhost:8050"
 published_at: null
 updated_at: null
 authors: ["The Unexpected Professor"]
