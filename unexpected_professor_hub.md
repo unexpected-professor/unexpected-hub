@@ -19,7 +19,7 @@
 | Local canonical clone | A local working clone (path deliberately kept out of public history) |
 | Canonical branch | `main` |
 | Repository-local Git author | `The Unexpected Professor` with the account-scoped GitHub no-reply address |
-| Remote publication state | Commit 0 (`0c5a043`) and Commit 1 (`5a71a77`) published on `origin/main` |
+| Remote publication state | Commit 0 (`0c5a043`) and Commit 1 (`5a71a77`) published on `origin/main`; later documentation-only commits may be pending local review before push |
 | Deployment control plane | Docker Compose + Caddy (ADR-010, resolved 2026-09-01) |
 | Monthly hosting budget ceiling | EUR 5-10 (small EU VPS, 2 vCPU / 4 GB class) |
 | First vertical slice | Converter-foundations lesson reusing the `cm1_dash` Dash pilot |
@@ -695,7 +695,7 @@ or documented decision.
 | UPH-004 | Governance | Decide French-only versus bilingual launch | DONE | UPH-001 | French-first launch; English may be evaluated later | 2026-09-01 |
 | UPH-005 | Governance | Select content, code, and asset licensing policy | DONE | None | Educational content: `CC-BY-SA-4.0`; code: `GPL-3.0-only`; third-party and brand assets require explicit notices; see `LICENSE.md` | 2026-09-01 |
 | UPH-006 | Governance | Determine personal/professional/institutional status and legal-notice requirements | IN PROGRESS | UPH-001 | Personal/non-professional status confirmed; host identification and final legal/privacy notice must be reviewed before launch and status reassessed before monetisation or affiliation | 2026-09-01 |
-| UPH-007 | Source control | Audit existing material for public export and metadata exposure | NOT STARTED | UPH-005, UPH-006 | — | 2026-09-01 |
+| UPH-007 | Source control | Audit existing material for public export and metadata exposure | DONE | UPH-005, UPH-006 | `documentation/asset-audit-cm1_dash.md`: `cm1_dash` cleared for export with 3 required changes to apply during UPH-019 (rebrand course identifiers, flatten PNGs, drop the dev log); dependency licences all permissive/compatible; no student data, secrets, or personal identifiers. Owner confirmed 2026-09-01 that the circuit diagrams are entirely their own work | 2026-09-01 |
 | UPH-008 | Source control | Create clean public-platform repository with protected secrets and correct author identity | DONE | UPH-001, UPH-005 | Commit 0 (`0c5a043`) and Commit 1 (`5a71a77`) published on `origin/main`; repository-local pseudonymous author and account-scoped no-reply email configured; dedicated `github-unexpected-professor` SSH alias verified; README, licences, security/contribution policies, ignore rules, and public-boundary checklist published. Note: earlier commits still contain the maintainer's local clone path in history | 2026-09-01 |
 | UPH-009 | Architecture | Decide Coolify versus Docker Compose + Caddy | DONE | None | ADR-010 resolved 2026-09-01: **Docker Compose + Caddy**; see section 4.3 | 2026-09-01 |
 | UPH-010 | Hosting | Select EU VPS provider, region, initial capacity, backup option, and budget ceiling | IN PROGRESS | UPH-009 | Budget ceiling set at EUR 5-10/month (2 vCPU / 4 GB class); EU provider, region, and backup option still to be selected | 2026-09-01 |
@@ -881,6 +881,7 @@ supersedes it; link to the new decision or correction.
 | 2026-09-01 | Phase 0 project choices | Recorded `@TheUnexpectedProfessor`, French-first publication, personal/non-professional status, `CC-BY-SA-4.0` educational content, and `GPL-3.0-only` code; attempted the authorised first push | Local tracker and licence boundary updated; GitHub rejected the push because SSH authenticated as `luizvilla`, leaving the remote empty and local Commit 0 intact | Commit 1: `chore(hub): establish public repository boundaries` (local) | Configure a dedicated GitHub SSH identity, push Commit 0, then request separate approval before pushing Commit 1 |
 | 2026-09-01 | Phase 0 GitHub authentication recovery | Located the existing dedicated `id_ed25519_tup` key, verified it authenticates as `unexpected-professor`, published exactly Commit 0, added the `github-unexpected-professor` SSH alias, and made the repository remote use that alias | `origin/main` at `0c5a043`; local `main` one commit ahead at Commit 1; SSH authentication test returned `Hi unexpected-professor!` | Remote: `0c5a043`; local: `e82d958` before amendment | Review the amended local Commit 1 and obtain explicit approval before pushing it |
 | 2026-09-01 | Phase 0 boundary publication and deployment decisions | Scanned Commit 1 for secrets/personal data, published Commit 1 to `origin/main` (UPH-008 DONE); resolved ADR-010 to Docker Compose + Caddy (UPH-009 DONE); set the EUR 5-10/month VPS budget ceiling (ADR-016); selected the `cm1_dash` converter-foundations first vertical slice (ADR-017); scrubbed the maintainer's local clone path from the working document | `origin/main` at `5a71a77`; `git rev-list` shows local and remote level; sensitive-string scan of Commit 1 clean apart from the already-public clone path | `docs(hub): record deployment model and pilot slice decisions` (follows Commit 1; not part of the numbered feature sequence) | Run the UPH-007 asset audit on `cm1_dash`, then shortlist a domain/registrar and an EU VPS provider |
+| 2026-09-01 | UPH-007 asset audit of `cm1_dash` | Read every `cm1_dash` source file, the two matplotlib originals, all 11 circuit PNGs, and the dev log; checked dependency licences, git authorship, embedded metadata, and course identifiers against `public-boundary.md` | `documentation/asset-audit-cm1_dash.md`: cleared for export; required changes are rebranding the `Énergie S3 / CM1 / CM2` identifiers, flattening the PNGs (they embed editable `mxfile` XML), and dropping `dash_development.md`; deps (`dash`/`dbc`/`plotly`/`numpy`/`matplotlib`/`Pillow`) all permissive and GPL-compatible; no student data, secrets, or personal identifiers | `docs(hub): record the cm1_dash asset audit` (follows the decisions commit) | UPH-007 signed off (owner confirmed diagram authorship 2026-09-01). Next: shortlist a domain/registrar and an EU VPS provider, then start UPH-019 export |
 
 ## 24. Known open questions
 
@@ -911,18 +912,19 @@ course asset, or deployment exists yet.
 
 Remaining Phase 0 work, in order:
 
-1. In GitHub **Settings -> Emails**, confirm **Keep my email addresses private**
-   and enable blocking of command-line pushes that expose a personal email.
-2. **UPH-007** — run the `documentation/public-boundary.md` export checklist
-   against `new_course/images/plotting_python/cm1_dash/` (app, `callbacks/`,
-   `models/`, `layouts/`, `i18n.py`, `assets/`, `requirements.txt`): third-party
-   code/asset licences, embedded names, absolute paths, secrets, pedagogical
-   readiness. Record the result and start the attribution register.
-3. **UPH-002 / UPH-003** — shortlist `.fr` / `.com` domains, verify
+1. **UPH-002 / UPH-003** — shortlist `.fr` / `.com` domains, verify
    availability and handle consistency, choose a registrar, register, enable
    MFA.
-4. **UPH-010** — pick an EU VPS provider, region, and backup option within the
+2. **UPH-010** — pick an EU VPS provider, region, and backup option within the
    EUR 5-10/month ceiling; record owner and recurring cost.
+
+UPH-007 is DONE: the `cm1_dash` audit
+(`documentation/asset-audit-cm1_dash.md`) cleared the pilot for export, and
+the owner confirmed the circuit diagrams are their own work. The three
+required changes (rebrand identifiers, flatten PNGs, drop the dev log) are
+applied during UPH-019, not now.
+
+GitHub email privacy was reviewed and judged not necessary for this project.
 
 Then Phase 1 begins with the numbered feature sequence: Commit 2
 (`feat(site): scaffold the educational website`), Commit 3 (privacy-aware
