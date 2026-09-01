@@ -16,10 +16,13 @@
 | Source-code licence | GNU General Public License version 3 only (`GPL-3.0-only`) |
 | GitHub account | `unexpected-professor` (`https://github.com/unexpected-professor/`) |
 | Canonical repository | `git@github.com:unexpected-professor/unexpected-hub.git` |
-| Local canonical clone | `/home/luiz-villa/code/unexpected/unexpected-hub` |
+| Local canonical clone | A local working clone (path deliberately kept out of public history) |
 | Canonical branch | `main` |
 | Repository-local Git author | `The Unexpected Professor` with the account-scoped GitHub no-reply address |
-| Remote publication state | Commit 0 (`0c5a043`) published on `origin/main`; local Commit 1 remains unpushed |
+| Remote publication state | Commit 0 (`0c5a043`) and Commit 1 (`5a71a77`) published on `origin/main` |
+| Deployment control plane | Docker Compose + Caddy (ADR-010, resolved 2026-09-01) |
+| Monthly hosting budget ceiling | EUR 5-10 (small EU VPS, 2 vCPU / 4 GB class) |
+| First vertical slice | Converter-foundations lesson reusing the `cm1_dash` Dash pilot |
 | Current course repository | `Energie S3` |
 | Current course branch | `dash` |
 | Course baseline at project creation | `238f504` (`docs(status): reconcile progress trackers and record resume point`) |
@@ -159,14 +162,16 @@ depends on the service.
 
 ### 4.3 Decision gate: Coolify or plain Compose
 
-This choice must be made before provisioning the production server.
+**Resolved 2026-09-01 (ADR-010): Docker Compose + Caddy.** The pilot is a
+single-maintainer deployment of one static site plus one Dash lab, on a small
+EU VPS with a monthly budget ceiling of EUR 5-10 (2 vCPU / 4 GB class). A
+minimal, auditable stack with automatic HTTPS fits that constraint; Coolify's
+extra RAM and administrative surface are not justified yet. Reconsider Coolify
+only if several evolving apps and frequent Git-driven deploys appear.
 
-Choose **Coolify** if the priority is frequent Git-based deployments and a
-graphical operational interface. Choose **Docker Compose + Caddy** if the
-priority is a minimal, auditable stack and direct control of every service.
-
-The application containers should remain compatible with both approaches.
-The choice of deployment control plane must not leak into application code.
+The application containers must still remain compatible with both approaches.
+The choice of deployment control plane must not leak into application code, so
+a later switch to Coolify remains possible without rewriting the labs.
 
 ### 4.4 Logical services
 
@@ -691,9 +696,9 @@ or documented decision.
 | UPH-005 | Governance | Select content, code, and asset licensing policy | DONE | None | Educational content: `CC-BY-SA-4.0`; code: `GPL-3.0-only`; third-party and brand assets require explicit notices; see `LICENSE.md` | 2026-09-01 |
 | UPH-006 | Governance | Determine personal/professional/institutional status and legal-notice requirements | IN PROGRESS | UPH-001 | Personal/non-professional status confirmed; host identification and final legal/privacy notice must be reviewed before launch and status reassessed before monetisation or affiliation | 2026-09-01 |
 | UPH-007 | Source control | Audit existing material for public export and metadata exposure | NOT STARTED | UPH-005, UPH-006 | — | 2026-09-01 |
-| UPH-008 | Source control | Create clean public-platform repository with protected secrets and correct author identity | IN PROGRESS | UPH-001, UPH-005, UPH-007 | Commit 0 published to `origin/main`; repository-local pseudonymous author and account-scoped no-reply email configured; dedicated `github-unexpected-professor` SSH alias verified; README, licences, security/contribution policies, ignore rules, and public-boundary checklist added in local Commit 1; first asset export audit pending | 2026-09-01 |
-| UPH-009 | Architecture | Decide Coolify versus Docker Compose + Caddy | NOT STARTED | None | — | 2026-09-01 |
-| UPH-010 | Hosting | Select EU VPS provider, region, initial capacity, backup option, and budget ceiling | NOT STARTED | UPH-009 | — | 2026-09-01 |
+| UPH-008 | Source control | Create clean public-platform repository with protected secrets and correct author identity | DONE | UPH-001, UPH-005 | Commit 0 (`0c5a043`) and Commit 1 (`5a71a77`) published on `origin/main`; repository-local pseudonymous author and account-scoped no-reply email configured; dedicated `github-unexpected-professor` SSH alias verified; README, licences, security/contribution policies, ignore rules, and public-boundary checklist published. Note: earlier commits still contain the maintainer's local clone path in history | 2026-09-01 |
+| UPH-009 | Architecture | Decide Coolify versus Docker Compose + Caddy | DONE | None | ADR-010 resolved 2026-09-01: **Docker Compose + Caddy**; see section 4.3 | 2026-09-01 |
+| UPH-010 | Hosting | Select EU VPS provider, region, initial capacity, backup option, and budget ceiling | IN PROGRESS | UPH-009 | Budget ceiling set at EUR 5-10/month (2 vCPU / 4 GB class); EU provider, region, and backup option still to be selected | 2026-09-01 |
 | UPH-011 | Hosting | Provision VPS, administrative account, SSH keys, firewall, and updates | NOT STARTED | UPH-003, UPH-010 | — | 2026-09-01 |
 | UPH-012 | Hosting | Configure DNS and obtain HTTPS for canonical site and lab names | NOT STARTED | UPH-003, UPH-011 | — | 2026-09-01 |
 | UPH-013 | Site | Scaffold Astro static site and validated content collections | NOT STARTED | UPH-004, UPH-008 | — | 2026-09-01 |
@@ -702,7 +707,7 @@ or documented decision.
 | UPH-016 | Site | Add sitemap, feed, canonical metadata, error page, and basic SEO validation | NOT STARTED | UPH-013 | — | 2026-09-01 |
 | UPH-017 | Privacy | Add legal, privacy, licence, attribution, and contact pages | NOT STARTED | UPH-005, UPH-006, UPH-013 | — | 2026-09-01 |
 | UPH-018 | YouTube | Implement consent-controlled privacy-enhanced video component with direct-link fallback | NOT STARTED | UPH-013, UPH-017 | — | 2026-09-01 |
-| UPH-019 | Labs | Select and export the first approved Dash lab into the public repository | NOT STARTED | UPH-007, UPH-008 | Current candidate: `new_course/images/plotting_python/cm1_dash/` | 2026-09-01 |
+| UPH-019 | Labs | Select and export the first approved Dash lab into the public repository | NOT STARTED | UPH-007, UPH-008 | Selected 2026-09-01: `new_course/images/plotting_python/cm1_dash/` (converter-foundations slice); export blocked on the UPH-007 asset audit | 2026-09-01 |
 | UPH-020 | Labs | Pin dependencies, add Gunicorn, Dockerfile, non-root runtime, and health check | NOT STARTED | UPH-019 | — | 2026-09-01 |
 | UPH-021 | Labs | Add physics unit tests, server smoke test, asset verification, and responsive visual checks | NOT STARTED | UPH-020 | — | 2026-09-01 |
 | UPH-022 | Deployment | Add production Compose/deployment definitions without secrets | NOT STARTED | UPH-009, UPH-013, UPH-020 | — | 2026-09-01 |
@@ -820,7 +825,9 @@ scope.
 | ADR-007 | 2026-09-01 | Create a clean public repository rather than publishing the course repository | ACCEPTED | Protects private material, metadata, and unrelated history |
 | ADR-008 | 2026-09-01 | Defer analytics until a purpose and privacy basis are documented | ACCEPTED | Reduces launch complexity and tracking exposure |
 | ADR-009 | 2026-09-01 | Defer PeerTube and self-hosted video | ACCEPTED | Video operations are disproportionate to the initial need |
-| ADR-010 | 2026-09-01 | Choose between Coolify and plain Compose before VPS provisioning | OPEN | Affects server sizing and the operations workflow, not application portability |
+| ADR-010 | 2026-09-01 | Deploy the pilot with **Docker Compose + Caddy**, not Coolify | ACCEPTED | Minimal auditable stack with automatic HTTPS fits a single-maintainer pilot (one site + one lab) on a EUR 5-10/month VPS; containers stay Coolify-compatible so the control plane can change later without touching application code |
+| ADR-016 | 2026-09-01 | Target a small EU VPS with a EUR 5-10/month ceiling (2 vCPU / 4 GB class) for the pilot | ACCEPTED | Sets the capacity envelope for sizing, worker counts, and load testing; revisit if callback load or a second lab exceeds it |
+| ADR-017 | 2026-09-01 | Make the first vertical slice a converter-foundations lesson reusing the existing `cm1_dash` Dash pilot | ACCEPTED | Lowest new-work path to a complete lesson + lab + video slice; depends on the UPH-007 asset audit clearing the code and assets for public release |
 | ADR-011 | 2026-09-01 | Use **The Unexpected Professor** as the exact public display name and `unexpected-professor/unexpected-hub` as the public GitHub namespace | ACCEPTED | Establishes the initial brand and clean public source boundary; YouTube handle and domain remain separate decisions |
 | ADR-012 | 2026-09-01 | Launch in French first | ACCEPTED | Matches the immediate teaching audience and avoids maintaining premature bilingual duplication |
 | ADR-013 | 2026-09-01 | Operate initially as a personal, non-professional project independent of formal IUT affiliation | ACCEPTED | Preserves a clear public boundary; legal and institutional status must be reassessed if funding, monetisation, branding, or official use changes |
@@ -873,39 +880,53 @@ supersedes it; link to the new decision or correction.
 | 2026-09-01 | Phase 0 identity and repository boundary | Confirmed the display name **The Unexpected Professor**; audited the empty `unexpected-professor/unexpected-hub` clone and remote; prevented inheritance of the personal global Git email by setting repository-local pseudonymous author metadata | GitHub reports `unexpected-professor` as user ID `323542878`; local repository is empty on `main`; remote is `git@github.com:unexpected-professor/unexpected-hub.git` | Commit 0: `docs(plan): add The Unexpected Professor hub roadmap` | Confirm GitHub email-privacy settings and exact YouTube handle, then resolve language, licence, legal status, domain, and ADR-010 |
 | 2026-09-01 | Phase 0 project choices | Recorded `@TheUnexpectedProfessor`, French-first publication, personal/non-professional status, `CC-BY-SA-4.0` educational content, and `GPL-3.0-only` code; attempted the authorised first push | Local tracker and licence boundary updated; GitHub rejected the push because SSH authenticated as `luizvilla`, leaving the remote empty and local Commit 0 intact | Commit 1: `chore(hub): establish public repository boundaries` (local) | Configure a dedicated GitHub SSH identity, push Commit 0, then request separate approval before pushing Commit 1 |
 | 2026-09-01 | Phase 0 GitHub authentication recovery | Located the existing dedicated `id_ed25519_tup` key, verified it authenticates as `unexpected-professor`, published exactly Commit 0, added the `github-unexpected-professor` SSH alias, and made the repository remote use that alias | `origin/main` at `0c5a043`; local `main` one commit ahead at Commit 1; SSH authentication test returned `Hi unexpected-professor!` | Remote: `0c5a043`; local: `e82d958` before amendment | Review the amended local Commit 1 and obtain explicit approval before pushing it |
+| 2026-09-01 | Phase 0 boundary publication and deployment decisions | Scanned Commit 1 for secrets/personal data, published Commit 1 to `origin/main` (UPH-008 DONE); resolved ADR-010 to Docker Compose + Caddy (UPH-009 DONE); set the EUR 5-10/month VPS budget ceiling (ADR-016); selected the `cm1_dash` converter-foundations first vertical slice (ADR-017); scrubbed the maintainer's local clone path from the working document | `origin/main` at `5a71a77`; `git rev-list` shows local and remote level; sensitive-string scan of Commit 1 clean apart from the already-public clone path | `docs(hub): record deployment model and pilot slice decisions` (follows Commit 1; not part of the numbered feature sequence) | Run the UPH-007 asset audit on `cm1_dash`, then shortlist a domain/registrar and an EU VPS provider |
 
 ## 24. Known open questions
 
 1. Which matching `.fr`, `.com`, or other domain names are available?
-2. Should the first deployment favour Coolify convenience or plain Compose
-   simplicity?
-3. What recurring monthly budget is acceptable?
-4. What is the expected maximum simultaneous class size?
-5. Which existing lesson and video should form the first vertical slice?
-6. Should the first lab be publicly discoverable, public but unlisted, or
-    protected through institutional infrastructure?
-7. Does any existing course asset contain third-party material that prevents
-   release under `CC-BY-SA-4.0`?
-8. What exact legal notice is appropriate once the VPS provider and domain
+2. Which EU VPS provider and region, and which backup option, within the
+   EUR 5-10/month ceiling (ADR-016)?
+3. What is the expected maximum simultaneous class size (needed for load
+   testing and worker sizing)?
+4. Should the first lab be publicly discoverable, public but unlisted, or
+   protected through institutional infrastructure?
+5. Does any `cm1_dash` asset or dependency contain third-party material that
+   prevents release under `CC-BY-SA-4.0` / `GPL-3.0-only`? (UPH-007)
+6. What exact legal notice is appropriate once the VPS provider and domain
    registrar are known?
+
+Resolved: exact name and handle (ADR-011), launch language (ADR-012), legal
+status (ADR-013), licensing (ADR-014), deployment control plane (ADR-010),
+budget ceiling (ADR-016), first vertical slice (ADR-017).
 
 ## 25. Resume from here
 
-Phase 0 is in progress. Commit 0 is published on `origin/main`. The repository
-uses a dedicated SSH alias that authenticates as `unexpected-professor`, and
-local `main` contains the unpushed Commit 1 repository-boundary work. No public
-infrastructure, domain, application scaffold, course asset, or deployment has
-been created.
+Phase 0 is nearly complete. Commit 0 and Commit 1 are published on
+`origin/main` through the dedicated `unexpected-professor` SSH identity. The
+repository boundary, licensing, identity, deployment model (Docker Compose +
+Caddy), budget ceiling, and first vertical slice (`cm1_dash` converter
+foundations) are all decided. No domain, VPS, application scaffold, exported
+course asset, or deployment exists yet.
 
-At the next session:
+Remaining Phase 0 work, in order:
 
 1. In GitHub **Settings -> Emails**, confirm **Keep my email addresses private**
    and enable blocking of command-line pushes that expose a personal email.
-2. Review local Commit 1 and push it only after separate authorisation.
-3. Audit candidate course material and third-party assets before public export.
-4. Compare available domain names and choose a registrar.
-5. Decide between Coolify and Docker Compose + Caddy, then select an EU VPS
-   size and provider.
+2. **UPH-007** — run the `documentation/public-boundary.md` export checklist
+   against `new_course/images/plotting_python/cm1_dash/` (app, `callbacks/`,
+   `models/`, `layouts/`, `i18n.py`, `assets/`, `requirements.txt`): third-party
+   code/asset licences, embedded names, absolute paths, secrets, pedagogical
+   readiness. Record the result and start the attribution register.
+3. **UPH-002 / UPH-003** — shortlist `.fr` / `.com` domains, verify
+   availability and handle consistency, choose a registrar, register, enable
+   MFA.
+4. **UPH-010** — pick an EU VPS provider, region, and backup option within the
+   EUR 5-10/month ceiling; record owner and recurring cost.
 
-Do not begin broad site design or copy course assets until the public boundary,
-licensing, identity metadata, and repository destination have been decided.
+Then Phase 1 begins with the numbered feature sequence: Commit 2
+(`feat(site): scaffold the educational website`), Commit 3 (privacy-aware
+lesson media), Commit 4 (productionise the `cm1_dash` laboratory).
+
+Do not begin broad site design or copy course assets until the UPH-007 audit
+has cleared the pilot material.

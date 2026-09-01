@@ -45,7 +45,8 @@ See [`LICENSE.md`](LICENSE.md) for the exact scope and exceptions.
 ## Current resume point
 
 Use the tracker and the **Resume from here** section in
-[`unexpected_professor_hub.md`](unexpected_professor_hub.md). The next work is
-to finish Phase 0 decisions, configure the dedicated GitHub SSH identity,
-select a domain and deployment model, and audit the first candidate lesson and
-Dash laboratory for public release.
+[`unexpected_professor_hub.md`](unexpected_professor_hub.md). The name, licence,
+legal status, dedicated GitHub SSH identity, deployment model (Docker Compose +
+Caddy), budget ceiling, and first vertical slice are decided. The next work is
+to audit the first candidate Dash laboratory (`cm1_dash`) for public release,
+then select a domain, registrar, and EU VPS provider.
